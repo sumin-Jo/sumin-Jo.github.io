@@ -1,0 +1,130 @@
+/* ============ Skills ============ */
+
+/* 섹션 헤드 */
+.section-head h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+.skills {
+  margin-top: 3rem;
+}
+
+/* 원형 게이지 */
+.circle-skills {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.circle-card {
+  width: 140px;
+  height: 140px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.circle-card:hover {
+  transform: scale(1.05);
+}
+
+.circle-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.circle-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.circle-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.circle-label {
+  font-size: 0.9rem;
+  margin-top: 2px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* 바 형태 */
+.bar-skills {
+  display: grid;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.bar-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.bar-track {
+  height: 8px;
+  background: var(--track);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s ease;
+  animation: fillAnim 1s ease forwards;
+}
+
+/* 개별 스킬 색상 */
+.bar-card.css .bar-fill { background: var(--skill-css); }
+.bar-card.html .bar-fill { background: var(--skill-html); }
+.bar-card.jquery .bar-fill { background: var(--skill-jquery); }
+.bar-card.js .bar-fill { background: var(--skill-js); }
+.bar-card.react .bar-fill { background: var(--skill-react); }
+.bar-card.ts .bar-fill { background: var(--skill-ts); }
+.bar-card.node .bar-fill { background: var(--skill-node); }
+.bar-card.java .bar-fill { background: var(--skill-java); }
+.bar-card.mysql .bar-fill { background: var(--skill-mysql); }
+.bar-card.aws .bar-fill { background: var(--skill-aws); }
+
+/* 애니메이션 */
+@keyframes fillAnim {
+  from { width: 0; }
+  to { width: var(--value, 100%); }
+}
+
+/* 반응형 */
+@media (max-width: 600px) {
+  .circle-card {
+    width: 110px;
+    height: 110px;
+  }
+  .circle-value {
+    font-size: 1rem;
+  }
+  .circle-label {
+    font-size: 0.8rem;
+  }
+}
