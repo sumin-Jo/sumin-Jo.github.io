@@ -61,7 +61,6 @@
   color: var(--muted);
 }
 
-/* 바 형태 */
 .bar-skills {
   display: grid;
   gap: 1rem;
