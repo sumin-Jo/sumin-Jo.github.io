@@ -8,7 +8,6 @@
   animation: fadeUpDetail 0.6s ease;
 }
 
-/* 상단 히어로 이미지 */
 .detail-hero {
   width: 100%;
   max-height: 360px;
@@ -17,7 +16,6 @@
   margin-bottom: 16px;
 }
 
-/* 제목 */
 .detail .title {
   margin: 0 0 8px 0;
   font-size: 1.8rem;
@@ -39,7 +37,7 @@
 .detail .desc {
   line-height: 1.6;
   font-size: 1.05rem;
-  color: var(--text);   /* ← 고정 색상 제거, 변수 사용 */
+  color: var(--text);  
   margin-bottom: 20px;
 }
 
