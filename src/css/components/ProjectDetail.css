@@ -26,14 +26,13 @@
   color: transparent;
 }
 
-/* 메타 정보 */
 .detail .meta {
   color: var(--muted);
   font-size: 0.95rem;
   margin-bottom: 12px;
 }
 
-/* 설명 */
+
 .detail .desc {
   line-height: 1.6;
   font-size: 1.05rem;
@@ -41,7 +40,7 @@
   margin-bottom: 20px;
 }
 
-/* 링크 버튼 영역 */
+
 .detail .links {
   display: flex;
   gap: 10px;
