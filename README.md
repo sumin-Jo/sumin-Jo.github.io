@@ -1,14 +1,62 @@
-# React + Vite
+# 조수민 · 포트폴리오
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> **바로 보기:** **https://sumin-jo.github.io/#/**  
+> 깃허브 Pages(사용자 페이지)로 배포된 개인 포트폴리오 사이트입니다. 
+> React + Vite 기반이며, 프로젝트 데이터는 Supabase에서 가져옵니다.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ 미리보기
 
-## Expanding the ESLint configuration
+> ![preview](./public/images/preview.png)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-"# sumin-Jo.github.io" 
-"# sumin-Jo.github.io" 
+---
+
+## 🧰 기술 스택
+
+- **Frontend**: React 18, Vite, React Router (HashRouter)
+- **Styling**: 커스텀 CSS (다크·글래스·애니메이션), IntersectionObserver 리빌 효과
+- **Data**: Supabase
+- **CI/CD**: GitHub Pages
+
+---
+
+##  배포 (GitHub Pages)
+
+**사용자 페이지**(`sumin-jo.github.io`)라서 최상위 도메인으로 배포됩니다.
+
+### A) gh-pages 브랜치로 배포 (간단)
+- 빌드 후 `dist`를 `gh-pages` 브랜치에 푸시
+- 레포 **Settings → Pages**: **Deploy from a branch**, Branch=`gh-pages`, Folder=`/(root)`
+
+### B) GitHub Actions로 자동 배포 
+
+---
+
+##  주요 기능
+
+- 프로젝트 리스트 카드(글래스·그라데이션·호버 리프트)
+- 스크롤 리빌 애니메이션(IntersectionObserver)
+- 상세 페이지: 기간/스택/설명/성과 리스트
+- 스켈레톤 로딩
+- Supabase 연동(SELECT만 공개 정책)
+
+---
+
+## 👋 문의
+
+- Email: suminjo725@gmail.com
+- GitHub: https://github.com/sumin-Jo  
+- LinkedIn: https://www.linkedin.com/in/your-profile
+
+---
+
+##  라이선스
+MIT
+
+
+[![Live Site](https://img.shields.io/badge/Visit-Portfolio-7c9bff?style=for-the-badge)](https://sumin-jo.github.io/#/)
+![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-React-646cff?logo=vite&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-DB%20%2F%20Storage-3fcf8e?logo=supabase&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
