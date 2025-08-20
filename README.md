@@ -1,4 +1,4 @@
-# 조수민 · 포트폴리오
+# 포트폴리오
 
 > **바로 보기:** **https://sumin-jo.github.io/#/**  
 > 깃허브 Pages(사용자 페이지)로 배포된 개인 포트폴리오 사이트입니다. 
@@ -6,13 +6,13 @@
 
 ---
 
-## ✨ 미리보기
+## 미리보기
 
 > ![preview](./public/images/preview.png)
 
 ---
 
-## 🧰 기술 스택
+## 기술 스택
 
 - **Frontend**: React 18, Vite, React Router (HashRouter)
 - **Styling**: 커스텀 CSS (다크·글래스·애니메이션), IntersectionObserver 리빌 효과
@@ -46,14 +46,11 @@
 ## 👋 문의
 
 - Email: suminjo725@gmail.com
-- GitHub: https://github.com/sumin-Jo  
-- LinkedIn: https://www.linkedin.com/in/your-profile
+- GitHub: https://github.com/sumin-Jo
 
 ---
 
 ##  라이선스
-MIT
-
 
 [![Live Site](https://img.shields.io/badge/Visit-Portfolio-7c9bff?style=for-the-badge)](https://sumin-jo.github.io/#/)
 ![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=white)
