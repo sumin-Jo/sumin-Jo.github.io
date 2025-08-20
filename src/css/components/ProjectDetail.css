@@ -8,6 +8,32 @@
   animation: fadeUpDetail 0.6s ease;
 }
 
+.detail .meta-line{
+  margin: 6px 0 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.detail-section{
+  margin-top: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  background: var(--glass);
+  border-radius: 12px;
+}
+.detail-section h3{
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.result-list{
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.7;
+}
+.result-list li{
+  margin: 2px 0;
+}
+
+
 .detail-hero {
   width: 100%;
   max-height: 360px;

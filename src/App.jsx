@@ -18,7 +18,7 @@ export default function App() {
   useEffect(() => {
     (async () => {
       const { data, error } = await supabase
-        .from("portfolio")
+        .from("portfolio_projects")
         .select("*")
         .order("id", { ascending: true });
 

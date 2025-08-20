@@ -28,8 +28,21 @@ export default function ProjectDetail({ projects }) {
       <div className="detail" ref={reveal}>
         <img className="detail-hero" src={getImg(p)} alt={p.title} />
         <h1 className="title">{p.title}</h1>
-        {p.stack && <p className="meta">{p.stack}</p>}
+        <div className="meta-line">
+          {p.stack && <span>{p.stack}</span>}
+          {p.work_period && <span>· 기간: {p.work_period}</span>}
+        </div>
+
         {p.description && <p className="desc">{p.description}</p>}
+
+        {workResultItems.length > 0 && (
+          <section className="detail-section">
+            <h3>성과</h3>
+            <ul className="result-list">
+              {workResultItems.map((line, i) => <li key={i}>{line}</li>)}
+            </ul>
+          </section>
+        )}
 
         <div className="links">
           {p.repo && (
