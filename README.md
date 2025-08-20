@@ -50,10 +50,20 @@
 
 ---
 
-##  라이선스
+##  Live
 
 [![Live Site](https://img.shields.io/badge/Visit-Portfolio-7c9bff?style=for-the-badge)](https://sumin-jo.github.io/#/)
+
+---
+
+##  Tech Stack
+
 ![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-React-646cff?logo=vite&logoColor=white)
 ![Supabase](https://img.shields.io/badge/Supabase-DB%20%2F%20Storage-3fcf8e?logo=supabase&logoColor=white)
+
+---
+
+##  License
+
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
