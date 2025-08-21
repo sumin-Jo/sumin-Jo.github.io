@@ -25,7 +25,7 @@
 
 **사용자 페이지**(`sumin-jo.github.io`)라서 최상위 도메인으로 배포됩니다.
 
-### A) gh-pages 브랜치로 배포 (간단)
+### A) gh-pages 브랜치로 배포
 - 빌드 후 `dist`를 `gh-pages` 브랜치에 푸시
 - 레포 **Settings → Pages**: **Deploy from a branch**, Branch=`gh-pages`, Folder=`/(root)`
 
