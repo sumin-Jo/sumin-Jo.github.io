@@ -80,7 +80,7 @@ body:not(.light) .card .meta .company-badge:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px;
+  padding: 10px;
   position: relative;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
@@ -100,7 +100,7 @@ body:not(.light) .card .meta .company-badge:hover {
 /* 아바타 위 필기체 이름(원 안 중앙 고정) */
 .avatar-text-container {
   position: absolute;
-  inset: 0;
+  inset: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -108,6 +108,10 @@ body:not(.light) .card .meta .company-badge:hover {
   line-height: 1;
   gap: 2px;
   pointer-events: none;
+  width: auto;             
+  padding: 0 12px;
+  transform: translateZ(0) scale(0.90);
+  transform-origin: center;
 }
 
 .avatar-text-container .char {
@@ -119,8 +123,8 @@ body:not(.light) .card .meta .company-badge:hover {
   font-size: 34px;
   color: #fff !important; 
   white-space: nowrap;
-  overflow: hidden;
-  border-right: 2px solid #fff; /* 타이핑 커서 */
+  overflow: visible; 
+  border-right-color: #fff;
   text-align: center;
   margin: 0 auto;
   backface-visibility: hidden;
@@ -141,18 +145,28 @@ body:not(.light) .card .meta .company-badge:hover {
   }
 }
 
-.name-line { display: inline-flex; }
+.name-line { display: block;  text-align: center; }
 .name-line .char {
   opacity: 0;
   transform: translateY(0.2em);
-  font-size: 30px;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: 0.05em;
   font-family: 'Great Vibes', 'Alex Brush', cursive;
   animation: charIn 0.14s steps(1, end) forwards;
+  color: #fff !important;
 }
+
+.name-line::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;           /* 0.35em → 0.5em (크롬 안전치) */
+}
+
 
 /* Sumin → 한 번만 타이핑 후 커서 제거 */
 #line1 { --base: 0s; --step: 0.16s; }
-#line2 { --base: calc(5 * 0.16s + 0.20s); --step: 0.16s; }
+#line2 { --base: calc(5 * 0.16s + 0.10s); --step: 0.16s; }
 
 /* 각 글자에 인덱스 기반 딜레이 부여 */
 .name-line .char:nth-child(1) { animation-delay: calc(var(--base) + 0 * var(--step)); }
