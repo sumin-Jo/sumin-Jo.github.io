@@ -1,39 +1,16 @@
-/* 모드별 회사 뱃지 보완 (이 파일 하단에 배치) */
+/* ============ Hero & Header cleaned ============ */
 
-/* ── 라이트 모드 ───────────────────────────── */
-body.light .card .meta .company-badge {
-  background: var(--brand, #2563eb);
-  color: #fff;
-  border: 1px solid rgba(0,0,0,0.08);
-}
-
-body.light .card .meta .company-badge:hover {
-  background: var(--brand-hover, #1d4ed8); /* 라이트에서는 더 진한 톤 */
-}
-
-/* ── 다크 모드(기본) ───────────────────────── */
-body:not(.light) .card .meta .company-badge {
-  background: var(--brand, #3b82f6);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.18); /* 대비용 라이트 보더 */
-}
-
-body:not(.light) .card .meta .company-badge:hover {
-  background: var(--brand-hover, #60a5fa); /* 다크에서는 더 밝은 톤 */
-  color: #000;                              /* 대비 ↑ */
-}
-
-/* ============ Hero 영역 ============ */
+/* 히어로 컨테이너 */
 .hero {
   display: flex;
-  flex-direction: row;    
-  align-items: center;       
-  justify-content: center;   
-  gap: 2rem;              
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
   padding: 4rem 1rem;
   position: relative;
   z-index: 2;
-  text-align: left;         
+  text-align: left;
 }
 
 /* 타이틀 (gradient only on title) */
@@ -108,22 +85,20 @@ body:not(.light) .card .meta .company-badge:hover {
   line-height: 1;
   gap: 2px;
   pointer-events: none;
-  width: auto;             
+  width: auto;
   padding: 0 12px;
   transform: translateZ(0) scale(0.90);
   transform-origin: center;
 }
 
-.avatar-text-container .char {
-  color: #fff !important;  
-}
+.avatar-text-container .char { color: #fff !important; }
 
 .avatar-text-line {
   font-family: 'Parisienne', 'Great Vibes', cursive;
   font-size: 34px;
-  color: #fff !important; 
+  color: #fff !important;
   white-space: nowrap;
-  overflow: visible; 
+  overflow: visible;
   border-right-color: #fff;
   text-align: center;
   margin: 0 auto;
@@ -132,20 +107,10 @@ body:not(.light) .card .meta .company-badge:hover {
 }
 
 /* 타이핑(글자 단위) */
-@keyframes typing-name { 
-  from { width: 0; } 
-  to   { width: 100%; } 
-}
+@keyframes typing-name { from { width: 0; } to { width: 100%; } }
+@keyframes caret-off { to { border-right-color: transparent; border-right-width: 0; } }
 
-/* 커서를 즉시 제거(타이핑 끝과 동시에 실행) */
-@keyframes caret-off {
-  to {
-    border-right-color: transparent;
-    border-right-width: 0;
-  }
-}
-
-.name-line { display: block;  text-align: center; }
+.name-line { display: block; text-align: center; }
 .name-line .char {
   opacity: 0;
   transform: translateY(0.2em);
@@ -157,12 +122,7 @@ body:not(.light) .card .meta .company-badge:hover {
   color: #fff !important;
 }
 
-.name-line::after {
-  content: "";
-  display: inline-block;
-  width: 0.5em;           /* 0.35em → 0.5em (크롬 안전치) */
-}
-
+.name-line::after { content: ""; display: inline-block; width: 0.5em; }
 
 /* Sumin → 한 번만 타이핑 후 커서 제거 */
 #line1 { --base: 0s; --step: 0.16s; }
@@ -175,27 +135,14 @@ body:not(.light) .card .meta .company-badge:hover {
 .name-line .char:nth-child(4) { animation-delay: calc(var(--base) + 3 * var(--step)); }
 .name-line .char:nth-child(5) { animation-delay: calc(var(--base) + 4 * var(--step)); }
 
-@keyframes charIn {
-  0%   { opacity: 0; transform: translateY(0.2em); }
-  100% { opacity: 1; transform: translateY(0); }
-}
+@keyframes charIn { 0%{ opacity:0; transform:translateY(0.2em);} 100%{ opacity:1; transform:translateY(0);} }
 
-.period-badge { 
-  opacity: .9; 
-  font-weight: 600; 
-}
-.section-foot { 
-  display:flex; 
-  justify-content:center; 
-  margin-top: 1.25rem; 
-}
+/* ============ 공통 UI ============ */
+.period-badge { opacity:.9; font-weight:600; }
+.section-foot { display:flex; justify-content:center; margin-top:1.25rem; }
 
-/* 뱃지 */
-.badges {
-  margin-top: 10px;
-  display: flex;
-  gap: 8px;
-}
+/* 뱃지(기본) */
+.badges { margin-top:10px; display:flex; gap:8px; }
 .badge {
   font-size: 0.85rem;
   padding: 4px 10px;
@@ -203,17 +150,34 @@ body:not(.light) .card .meta .company-badge:hover {
   background: var(--panel);
   color: var(--text);
 }
-.badge.alt {
-  background: var(--brand-2);
-  color: #fff;
+.badge.alt { background: var(--brand-2); color: #fff; }
+
+/* === 연락/위치 바 – .badge와 완전 매칭된 칩 === */
+.contact-bar { display:flex; flex-wrap:wrap; gap:10px; margin:12px 0 4px; }
+.contact-bar .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;           /* .badge와 동일 */
+  border-radius: 12px;          /* .badge와 동일 */
+  font-size: 0.85rem;           /* .badge와 동일 */
+  line-height: 1;               /* pill 높이 정렬 */
+  background: var(--panel);     /* .badge와 동일 */
+  color: var(--text);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+  will-change: transform;
 }
+.contact-bar .chip:hover {
+  transform: translateY(-1px);
+  border-color: var(--brand);
+}
+.contact-bar .chip svg { width: 1em; height: 1em; display:inline-block; vertical-align:-0.12em; }
+.contact-bar .chip svg path { fill: currentColor; opacity:.95; }
 
 /* CTA 버튼 */
-.cta {
-  margin-top: 14px;
-  display: flex;
-  gap: 10px;
-}
+.cta { margin-top:14px; display:flex; gap:10px; }
 .cta .btn.ghost {
   border: 1px solid var(--border);
   padding: 6px 14px;
@@ -223,113 +187,10 @@ body:not(.light) .card .meta .company-badge:hover {
   color: var(--text);
   transition: background 0.2s ease;
 }
-.cta .btn.ghost:hover {
-  background: var(--panel);
-}
+.cta .btn.ghost:hover { background: var(--panel); }
 
-/* 카드 내부 전용 */
-.card-body {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  height: 100%;
-}
-
-/* 회사명 강조 (알약형 반전 뱃지) — 아래쪽에 배치 */
-.card .meta .company-badge {
-  background: transparent !important;    
-  color: var(--brand, #63b3c7) !important;
-  border: 1px solid var(--brand, #63b3c7) !important;
-  font-weight: 600;
-  padding: 0.35rem 0.9rem;
-  border-radius: 9999px;
-  font-size: 0.85rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-}
-/* hover 시만 살짝 채워주기 */
-.card .meta .company-badge:hover {
-  color: #fff;
-}
-
-/* 기간은 보조 텍스트 */
-.card .meta .period {
-  margin-left: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--muted);
-  font-style: italic;
-}
-
-/* 기술 스택 뱃지 */
-.badge.tech {
-  color: var(--text);    /* 라이트/다크 모두 자동 대비 */
-  border: none;
-  font-weight: 500;
-}
-
-/* 다크 모드일 때만 글자 밝게 */
-body:not(.light) .badge.tech {
-  color: #fff;
-}
-
-/* 설명 글자 */
-.desc {
-  color: var(--muted) !important;
-}
-
-.links {
-  display: flex;
-  gap: 8px;
-  margin-top: auto;
-}
-.links .btn {
-  font-size: 0.85rem;
-  padding: 6px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  text-decoration: none;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-.links .btn:hover {
-  background: var(--brand);
-  color: #fff;
-}
-.links .btn.ghost {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--brand);
-  color: var(--brand);
-}
-.links .btn.ghost:hover {
-  background: var(--brand);
-  color: #fff;
-}
-
-/* Pulse 애니메이션 */
-@keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(0, 180, 255, 0.6); }
-  70%  { box-shadow: 0 0 0 15px rgba(0, 180, 255, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 180, 255, 0); }
-}
-
-/* 타이핑 애니메이션 (타이틀용) */
-.typing {
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 2px solid var(--brand);
-  animation: typing 2s steps(30, end), blink 0.8s step-end infinite;
-}
-
-@keyframes typing {
-  from { width: 0; }
-  to   { width: 100%; }
-}
-
-@keyframes blink {
-  50% { border-color: transparent; }
-}
+.btn.primary { background: var(--brand, #3b82f6); color:#fff; border:1px solid var(--brand, #3b82f6); }
+.btn.primary:hover { filter: brightness(1.05); }
 
 .theme-toggle {
   border: 1px solid var(--border);
@@ -341,8 +202,85 @@ body:not(.light) .badge.tech {
   color: var(--text);
   transition: background 0.2s ease, color 0.2s ease;
 }
+.theme-toggle:hover { background: var(--panel); color: var(--brand); }
 
-.theme-toggle:hover {
-  background: var(--panel);
-  color: var(--brand);
+/* 카드 내부 전용 */
+.card-body { display:flex; flex-direction:column; gap:12px; height:100%; }
+
+/* 회사명 뱃지 – 알약형(외곽선) 버전만 사용 (모드별 충돌 제거) */
+.card .meta .company-badge {
+  background: transparent !important;
+  color: var(--brand, #63b3c7) !important;
+  border: 1px solid var(--brand, #63b3c7) !important;
+  font-weight: 600;
+  padding: 0.35rem 0.9rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
+.card .meta .company-badge:hover { color:#fff; }
+
+/* 기간은 보조 텍스트 */
+.card .meta .period { margin-left: 0.5rem; font-size: 0.85rem; color: var(--muted); font-style: italic; }
+
+/* 기술 스택 뱃지 */
+.badge.tech { color: var(--text); border: none; font-weight: 500; }
+body:not(.light) .badge.tech { color:#fff; }
+
+/* 설명 글자 */
+.desc { color: var(--muted) !important; }
+
+.links { display:flex; gap:8px; margin-top:auto; }
+.links .btn {
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.links .btn:hover { background: var(--brand); color:#fff; }
+.links .btn.ghost { background: rgba(255,255,255,0.05); border:1px solid var(--brand); color: var(--brand); }
+.links .btn.ghost:hover { background: var(--brand); color:#fff; }
+
+/* Pulse 애니메이션 */
+@keyframes pulse { 0%{ box-shadow:0 0 0 0 rgba(0,180,255,.6);} 70%{ box-shadow:0 0 0 15px rgba(0,180,255,0);} 100%{ box-shadow:0 0 0 0 rgba(0,180,255,0);} }
+
+/* 타이핑 애니메이션 (타이틀용) */
+.typing { display:inline-block; overflow:hidden; white-space:nowrap; border-right:2px solid var(--brand); animation: typing 2s steps(30, end), blink 0.8s step-end infinite; }
+@keyframes typing { from{ width:0;} to{ width:100%;} }
+@keyframes blink { 50%{ border-color: transparent; } }
+
+/* 컨텐트 패널(히어로 텍스트 박스) */
+.content-panel {
+  background: var(--panel, rgba(255,255,255,0.04));
+  border: 1px solid var(--border, rgba(255,255,255,0.12));
+  border-radius: 16px;
+  padding: 18px 20px;
+  backdrop-filter: saturate(120%) blur(6px);
+  box-shadow: 0 6px 28px rgba(0,0,0,0.06);
+}
+
+/* 상단 작은 키커 텍스트 */
+.kicker { display:inline-block; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+
+/* 타이틀 타이트한 간격 */
+.title.tight { margin: 2px 0 6px 0; }
+
+/* 반응형 */
+@media (max-width: 720px) {
+  .content-panel { padding: 16px; border-radius: 14px; }
+  .contact-bar { gap: 8px; }
+}
+
+/* 라이트 모드 미세 조정 */
+body.light .content-panel { background:#fff; border-color: rgba(0,0,0,0.08); box-shadow: 0 8px 28px rgba(0,0,0,.06); }
+body.light .contact-bar .chip {
+  color: #111827;
+  border-color: rgba(0,0,0,0.08);
+  background: linear-gradient(0deg, #f9fafb, #fff);
+}
+body.light .contact-bar .chip:hover { background: linear-gradient(0deg, #eef6ff, #fff); border-color: var(--brand, #2563eb); }

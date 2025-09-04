@@ -45,12 +45,32 @@ export default function Home({ projects = [] }) {
 
           <div className="badges">
             <span className="badge">Open to opportunities</span>
-            <span className="badge alt">Seoul · KR</span>
+          </div>
+
+          <div className="contact-bar">
+            <a href="mailto:suminjo725@gmail.com" className="chip" aria-label="이메일 보내기">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                <path d="M4 6h16a2 2 0 0 1 2 2v.35l-10 6.25L2 8.35V8a2 2 0 0 1 2-2zm18 4.2V16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-5.8l10 6.25 10-6.25z" />
+              </svg>
+              <span>suminjo725@gmail.com</span>
+            </a>
+
+            <a href="https://github.com/sumin-Jo" target="_blank" rel="noreferrer" className="chip" aria-label="GitHub 열기">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path d="M12 0a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.1c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.76.08-.75.08-.75 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.96 0-1.32.47-2.39 1.23-3.24-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.85 1.23 1.92 1.23 3.24 0 4.63-2.8 5.66-5.48 5.96.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58A12 12 0 0 0 12 0z" />
+              </svg>
+              <span>GitHub</span>
+            </a>
+
+            <span className="chip" aria-label="위치">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
+              </svg>
+              <span>Gwangjin-gu, Seoul</span>
+            </span>            
           </div>
 
           <nav className="cta">
-            <a href="mailto:suminjo725@gmail.com" className="btn ghost">Email</a>
-            <a href="https://github.com/sumin-Jo" target="_blank" rel="noreferrer" className="btn ghost">GitHub</a>
             <button
               className="theme-toggle"
               onClick={() => document.body.classList.toggle("light")}
@@ -100,7 +120,7 @@ export default function Home({ projects = [] }) {
                       )}
                     </div>
                   )}
-                  
+
                   {/* 기술 스택 */}
                   {p.stack && (
                     <div className="stack">
