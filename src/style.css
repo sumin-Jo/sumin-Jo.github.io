@@ -1,11 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&display=swap');
+
 :root {
   /* Skills 색상 */
   --skill-css: #3b82f6;
   --skill-html: #f97316;
   --skill-jquery: #a855f7;
   --skill-js: #eab308;
-
-  /* 바 형태 색상 */
   --bar-bg: rgba(255,255,255,0.15);
   --bar-text: var(--text);
 }
@@ -17,6 +17,7 @@ body.light {
   --border: #ddd;
   --track: #eee;
   --muted: #666;
+  --pill-border: rgba(0,0,0,0.08);
 }
 
 * { box-sizing: border-box }
@@ -28,6 +29,7 @@ body {
   --border: #333;
   --track: #444;
   --muted: #999;
+  --pill-border: rgba(255,255,255,0.18);
   background: var(--bg);
   color: var(--text);
 }
@@ -39,7 +41,6 @@ body {
   padding: 28px 20px;
 }
 
-/* 🌈 Animated Background Blobs */
 .bg {
   position: fixed;
   inset: -10% -10% auto -10%;
@@ -77,7 +78,6 @@ body {
   50% { transform: translateY(-28px) }
 }
 
-/* 🌐 Section 공통 헤더 */
 .section-head {
   display: flex;
   justify-content: space-between;
@@ -95,7 +95,6 @@ body {
   color: var(--accent);
 }
 
-/* 🪟 Grid & Card 레이아웃 */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
@@ -125,7 +124,6 @@ body {
 .meta { font-size: 13px; color: var(--muted); margin-bottom: 8px }
 .desc { line-height: 1.6; color: var(--muted) }
 
-/* 🪫 Empty / Skeleton */
 .empty { color: var(--muted); margin: 14px 0 }
 .skeleton {
   background: linear-gradient(90deg, rgba(255,255,255,.05), rgba(255,255,255,.15) 40%, rgba(255,255,255,.05) 80%);
@@ -142,7 +140,6 @@ body {
   100% { background-position: -200% 0 }
 }
 
-/* 🎞 Reveal Animation (공통) */
 .reveal {
   opacity: 0;
   transform: translateY(20px);
@@ -160,7 +157,6 @@ body {
   transform: translateY(0) scale(1);
 }
 
-/* 🔘 버튼 */
 .btn {
   background: var(--panel);
   color: var(--text);
@@ -170,13 +166,11 @@ body {
   cursor: pointer;
 }
 
-/* 📊 그래프 텍스트 공통 */
 .circle-value { color: var(--text) }
 .circle-label { color: var(--muted) }
 .bar-label { color: var(--text) }
 .bar-fill { background: var(--accent) }
 
-/* 반응형 */
 @media (max-width:680px) {
   .title { font-size: 26px }
 }

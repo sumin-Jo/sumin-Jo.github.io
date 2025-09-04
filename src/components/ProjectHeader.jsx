@@ -3,9 +3,12 @@ import { Link } from "react-router-dom";
 import useReveal from "../hooks/useReveal";
 import "./../css/components/ProjectHeader.css";
 
-
-export default function Home({ projects }) {
+export default function Home({ projects = [] }) {
   const reveal = useReveal();
+
+  // 홈에서는 상위 6개만 노출
+  const top6 = Array.isArray(projects) ? projects.slice(0, 6) : [];
+  const hasMore = Array.isArray(projects) && projects.length > 6;
 
   return (
     <main className="wrap">
@@ -14,10 +17,22 @@ export default function Home({ projects }) {
         <span className="blob b2" />
       </div>
 
-      {/* Hero */}
       <header className="hero" ref={reveal}>
         <div className="avatar-ring pulse">
-          <img className="avatar" src="/images/profile.jpg"/>
+          <div className="avatar-text-container">
+            <span className="name-line" id="line1">
+              <span className="char">S</span>
+              <span className="char">u</span>
+              <span className="char">m</span>
+              <span className="char">i</span>
+              <span className="char">n</span>
+            </span>
+
+            <span className="name-line" id="line2">
+              <span className="char">J</span>
+              <span className="char">o</span>
+            </span>
+          </div>
         </div>
 
         <div className="content">
@@ -39,6 +54,8 @@ export default function Home({ projects }) {
             <button
               className="theme-toggle"
               onClick={() => document.body.classList.toggle("light")}
+              aria-label="테마 전환"
+              title="테마 전환"
             >
               🌙 / ☀️
             </button>
@@ -50,24 +67,40 @@ export default function Home({ projects }) {
       <section ref={reveal}>
         <div className="section-head">
           <h2>프로젝트</h2>
-          <Link to="/" className="more">
-            전체 보기 →
-          </Link>
+
+          {/* 6개 초과 시에만 '더보기' 노출 */}
+          {hasMore && (
+            <Link to="/projects" className="more" aria-label="프로젝트 전체 보기">
+              더보기 →
+            </Link>
+          )}
         </div>
 
-        {projects.length === 0 ? (
+        {top6.length === 0 ? (
           <p className="empty">아직 등록된 프로젝트가 없습니다.</p>
         ) : (
           <div className="grid">
-            {projects.map((p, i) => (
+            {top6.map((p, i) => (
               <article
                 className="card glass hover-raise"
-                key={p.id}
+                key={p.id ?? `proj-${i}`}
                 ref={reveal}
               >
                 <div className="card-body">
                   <h3 className="card-title">{p.title}</h3>
 
+                  {/* 회사명 + 기간 */}
+                  {(p.work_company || p.work_period) && (
+                    <div className="meta">
+                      {p.work_company && (
+                        <span className="badge company-badge">{p.work_company}</span>
+                      )}
+                      {p.work_period && (
+                        <span className="period">{p.work_period}</span>
+                      )}
+                    </div>
+                  )}
+                  
                   {/* 기술 스택 */}
                   {p.stack && (
                     <div className="stack">
@@ -102,13 +135,19 @@ export default function Home({ projects }) {
                         Demo ↗
                       </a>
                     )}
-                    <Link className="btn tiny ghost" to={`/project/${i}`}>
-                      상세
-                    </Link>
                   </div>
                 </div>
               </article>
             ))}
+          </div>
+        )}
+
+        {/* 하단에도 '더보기' 버튼 (모바일 고려) */}
+        {hasMore && (
+          <div className="section-foot">
+            <Link to="/projects" className="btn ghost">
+              프로젝트 전체 보기
+            </Link>
           </div>
         )}
       </section>
