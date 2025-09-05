@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { supabase } from "./lib/supabaseClient";
 import ProjectHeader from "./components/ProjectHeader";
 import ProjectDetail from "./components/ProjectDetail";
+import WorksPage from "./components/pages/WorksPage";
 import Skills from "./components/Skills";
 import useReveal from "./hooks/useReveal";
 
@@ -60,6 +61,7 @@ export default function App() {
             <>
               <ProjectHeader projects={projects} />
               <Skills reveal={reveal} />
+              <WorksPage/>
             </>
           }
         />

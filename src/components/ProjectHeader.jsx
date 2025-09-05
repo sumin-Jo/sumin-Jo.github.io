@@ -87,13 +87,6 @@ export default function Home({ projects = [] }) {
       <section ref={reveal}>
         <div className="section-head">
           <h2>프로젝트</h2>
-
-          {/* 6개 초과 시에만 '더보기' 노출 */}
-          {hasMore && (
-            <Link to="/projects" className="more" aria-label="프로젝트 전체 보기">
-              더보기 →
-            </Link>
-          )}
         </div>
 
         {top6.length === 0 ? (
