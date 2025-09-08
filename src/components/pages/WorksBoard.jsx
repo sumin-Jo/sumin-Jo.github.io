@@ -78,11 +78,11 @@ export default function WorksBoard({
       </div>
 
       {/* 프리뷰일 때만 더보기 버튼 */}
-      {!all && (
+      {/* {!all && (
         <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
           <a className="btn" href={showMoreHref}>전체 보기</a>
         </div>
-      )}
+      )} */}
 
       {!loading && items.length === 0 && <div className="empty">조건에 맞는 작업이 없습니다.</div>}
     </section>
