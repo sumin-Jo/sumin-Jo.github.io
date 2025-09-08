@@ -60,10 +60,7 @@ export default function Skills({ reveal }) {
                 <span>{s.value}%</span>
               </div>
               <div className="bar-track">
-                <div
-                  className="bar-fill"
-                  style={{ width: `${s.value}%` }}
-                />
+                <div className="bar-fill" style={{ width: `${s.value}%` }} />
               </div>
             </div>
           ))}
