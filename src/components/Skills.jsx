@@ -8,18 +8,18 @@ import "../css/components/Skills.css";
 
 export default function Skills({ reveal }) {
   const skillsCircle = [
-    { name: "CSS", value: 90, class: "css" },
-    { name: "HTML", value: 80, class: "html" },
-    { name: "jQuery", value: 75, class: "jquery" },
+    { name: "Node.js", value: 90, class: "css" },
+    { name: "Java", value: 80, class: "html" },
+    { name: "React", value: 75, class: "jquery" },
     { name: "JavaScript", value: 85, class: "js" },
   ];
 
   const skillsBar = [
-    { name: "React", value: 90, class: "react" },
-    { name: "TypeScript", value: 85, class: "ts" },
-    { name: "Node.js", value: 80, class: "node" },
-    { name: "Java", value: 75, class: "java" },
-    { name: "MySQL", value: 85, class: "mysql" },
+    { name: "PHP", value: 75, class: "php" },
+    { name: "Python", value: 70, class: "python" },
+    { name: "TypeScript", value: 70, class: "ts" },
+    { name: "MSSQL", value: 85, class: "mssql" },
+    { name: "MySQL", value: 75, class: "mysql" },
     { name: "AWS", value: 70, class: "aws" },
   ];
 
