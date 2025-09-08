@@ -62,21 +62,22 @@
   to   { transform: scaleX(1); }
 }
 
-.bar-card.css    .bar-fill { background: var(--skill-css, #3b82f6); }
-.bar-card.html   .bar-fill { background: var(--skill-html, #f97316); }
-.bar-card.jquery .bar-fill { background: var(--skill-jquery, #a855f7); }
-.bar-card.js     .bar-fill { background: var(--skill-js, #eab308); }
-.bar-card.react  .bar-fill { background: var(--skill-react, #61dafb); }
-.bar-card.ts     .bar-fill { background: var(--skill-ts, #3178c6); }
-.bar-card.node   .bar-fill { background: var(--skill-node, #7fc728); }
-.bar-card.java   .bar-fill { background: var(--skill-java, #e76f00); }
-.bar-card.mysql  .bar-fill { background: var(--skill-mysql, #4db38f); }
-.bar-card.aws    .bar-fill { background: var(--skill-aws, #ff9900); }
-.bar-card.php    .bar-fill { background: var(--skill-php, #777bb3); }
-.bar-card.python .bar-fill { background: var(--skill-python, #3776ab); }
-.bar-card.mssql  .bar-fill { background: var(--skill-mssql, #a91d22); }
+.bar-card.css    .bar-fill { background: #a5c9ff; }  
+.bar-card.html   .bar-fill { background: #ffc9a1; }   
+.bar-card.jquery .bar-fill { background: #d8b4fe; }   
+.bar-card.js     .bar-fill { background: #fde68a; }  
+.bar-card.react  .bar-fill { background: #a7f3d0; }  
+.bar-card.ts     .bar-fill { background: #bfdbfe; }  
+.bar-card.node   .bar-fill { background: #c6f6d5; }   
+.bar-card.java   .bar-fill { background: #fbc2a9; }  
+.bar-card.mysql  .bar-fill { background: #9fe2c5; }   
+.bar-card.aws    .bar-fill { background: #ffe29f; }   
+.bar-card.php    .bar-fill { background: #c9c3e6; }  
+.bar-card.python .bar-fill { background: #b3d2ff; } 
+.bar-card.mssql  .bar-fill { background: #f5aab9; }   
 
 @media (max-width: 600px) {
   .circle-card { width: 110px; height: 110px; }
   .circle-value { font-size: 1rem; }
-  .circle-label { font-size: 0.8rem; 
+  .circle-label { font-size: 0.8rem; }
+}
