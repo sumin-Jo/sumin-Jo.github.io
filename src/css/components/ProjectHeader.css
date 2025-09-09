@@ -1,6 +1,5 @@
 /* ============ Hero & Header cleaned ============ */
 
-/* 히어로 컨테이너 */
 .hero {
   display: flex;
   flex-direction: row;
@@ -13,7 +12,6 @@
   text-align: left;
 }
 
-/* 타이틀 (gradient only on title) */
 .hero .title {
   margin: 0;
   font-size: 2rem;
@@ -47,7 +45,6 @@
   align-items: flex-start;
 }
 
-/* 아바타 영역 */
 .avatar-ring {
   flex-shrink: 0;
   width: 140px;
@@ -74,7 +71,6 @@
   object-fit: cover;
 }
 
-/* 아바타 위 필기체 이름(원 안 중앙 고정) */
 .avatar-text-container {
   position: absolute;
   inset: 14px;
@@ -106,7 +102,7 @@
   transform: translateZ(0);
 }
 
-/* 타이핑(글자 단위) */
+
 @keyframes typing-name { from { width: 0; } to { width: 100%; } }
 @keyframes caret-off { to { border-right-color: transparent; border-right-width: 0; } }
 
@@ -124,11 +120,9 @@
 
 .name-line::after { content: ""; display: inline-block; width: 0.5em; }
 
-/* Sumin → 한 번만 타이핑 후 커서 제거 */
 #line1 { --base: 0s; --step: 0.16s; }
 #line2 { --base: calc(5 * 0.16s + 0.10s); --step: 0.16s; }
 
-/* 각 글자에 인덱스 기반 딜레이 부여 */
 .name-line .char:nth-child(1) { animation-delay: calc(var(--base) + 0 * var(--step)); }
 .name-line .char:nth-child(2) { animation-delay: calc(var(--base) + 1 * var(--step)); }
 .name-line .char:nth-child(3) { animation-delay: calc(var(--base) + 2 * var(--step)); }
@@ -141,7 +135,6 @@
 .period-badge { opacity:.9; font-weight:600; }
 .section-foot { display:flex; justify-content:center; margin-top:1.25rem; }
 
-/* 뱃지(기본) */
 .badges { margin-top:10px; display:flex; gap:8px; }
 .badge {
   font-size: 0.85rem;
@@ -152,17 +145,16 @@
 }
 .badge.alt { background: var(--brand-2); color: #fff; }
 
-/* === 연락/위치 바 – .badge와 완전 매칭된 칩 === */
 .contact-bar { display:flex; flex-wrap:wrap; gap:10px; margin:12px 0 4px; }
 .contact-bar .chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;           /* .badge와 동일 */
-  border-radius: 12px;          /* .badge와 동일 */
-  font-size: 0.85rem;           /* .badge와 동일 */
-  line-height: 1;               /* pill 높이 정렬 */
-  background: var(--panel);     /* .badge와 동일 */
+  padding: 4px 10px;          
+  border-radius: 12px;      
+  font-size: 0.85rem;         
+  line-height: 1;              
+  background: var(--panel);     
   color: var(--text);
   border: 1px solid var(--border);
   text-decoration: none;
@@ -207,7 +199,6 @@
 /* 카드 내부 전용 */
 .card-body { display:flex; flex-direction:column; gap:12px; height:100%; }
 
-/* 회사명 뱃지 – 알약형(외곽선) 버전만 사용 (모드별 충돌 제거) */
 .card .meta .company-badge {
   background: transparent !important;
   color: var(--brand, #63b3c7) !important;
@@ -223,14 +214,13 @@
 }
 .card .meta .company-badge:hover { color:#fff; }
 
-/* 기간은 보조 텍스트 */
+
 .card .meta .period { margin-left: 0.5rem; font-size: 0.85rem; color: var(--muted); font-style: italic; }
 
-/* 기술 스택 뱃지 */
+
 .badge.tech { color: var(--text); border: none; font-weight: 500; }
 body:not(.light) .badge.tech { color:#fff; }
 
-/* 설명 글자 */
 .desc { color: var(--muted) !important; }
 
 .links { display:flex; gap:8px; margin-top:auto; }
@@ -284,3 +274,62 @@ body.light .contact-bar .chip {
   background: linear-gradient(0deg, #f9fafb, #fff);
 }
 body.light .contact-bar .chip:hover { background: linear-gradient(0deg, #eef6ff, #fff); border-color: var(--brand, #2563eb); }
+
+
+@media (max-width: 720px) {
+  .hero {
+    flex-direction: column;   
+    gap: 1.5rem;
+    padding: 2rem 1rem;      
+    text-align: center;      
+  }
+
+  .hero .content {
+    align-items: center;      
+  }
+
+  .hero .title {
+    font-size: 1.6rem;     
+    line-height: 1.25;
+  }
+
+  .hero .subtitle {
+    font-size: 1rem;          
+  }
+
+  .avatar-ring {
+    width: 100px;
+    height: 100px;
+    padding: 6px;
+  }
+
+  .avatar-text-line {
+    font-size: 24px;        
+  }
+
+  .contact-bar {
+    justify-content: center;  
+    gap: 6px;
+  }
+
+  .contact-bar .chip {
+    font-size: 0.8rem;      
+    padding: 3px 8px;
+  }
+
+  .badge {
+    font-size: 0.8rem;
+    padding: 3px 8px;
+  }
+
+  .cta {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cta .btn {
+    font-size: 0.85rem;
+    padding: 5px 12px;
+  }
+}
