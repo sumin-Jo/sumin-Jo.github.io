@@ -48,11 +48,6 @@ export default function WorkFilters({
           {meta.stacks.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
 
-        <select value={company} onChange={e => setCompany(e.target.value)}>
-          <option value="">전체 회사</option>
-          {meta.companies.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
-
         {(categories.length > 0 || stack || company || q) && (
           <button
             className="reset-btn"
