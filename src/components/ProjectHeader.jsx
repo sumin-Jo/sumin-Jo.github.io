@@ -156,13 +156,13 @@ export default function Home({ projects = [] }) {
         )}
 
         {/* 하단에도 '더보기' 버튼 (모바일 고려) */}
-        {/* {hasMore && (
+        {hasMore && (
           <div className="section-foot">
             <Link to="/projects" className="btn ghost">
               프로젝트 전체 보기
             </Link>
           </div>
-        )} */}
+        )}
       </section>
     </main>
   );

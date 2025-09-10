@@ -6,6 +6,7 @@ import ProjectDetail from "./components/ProjectDetail";
 import WorksPage from "./components/pages/WorksPage";
 import Skills from "./components/Skills";
 import useReveal from "./hooks/useReveal";
+import ProjectsAll from "./components/pages/ProjectsAll";
 
 export default function App() {
   const [projects, setProjects] = useState([]);
@@ -65,8 +66,9 @@ export default function App() {
             </>
           }
         />
-        <Route path="/project/:idx" element={<ProjectDetail projects={projects} />} />
+        <Route path="/project/:id" element={<ProjectDetail projects={projects} />} />
         <Route path="/skills" element={<Skills reveal={reveal} />} />
+        <Route path="/projects" element={<ProjectsAll />} />
       </Routes>
     </>
   );
