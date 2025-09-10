@@ -72,7 +72,7 @@ export default function WorkCard({ item }) {
         <div className="meta-line">
           <span className={`badge ${colorKey(item.category)}`}>{item.category}</span>
           <span className="sub">
-            {item.stack} · {item.work_company}
+            {item.stack}
           </span>
         </div>
         <h3 className="ttl">{item.title}</h3>
@@ -101,7 +101,7 @@ export default function WorkCard({ item }) {
                 <span className={`badge ${colorKey(item.category)}`}>{item.category}</span>
                 <h3 id={titleId}>{item.title}</h3>
                 <p className="sub">
-                  {item.stack} · {item.work_company}
+                  {item.stack}
                 </p>
               </header>
 

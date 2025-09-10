@@ -19,14 +19,13 @@ export default function WorksBoard({
   const [q, setQ] = useState("");
   const [categories, setCategories] = useState([]);
   const [stack, setStack] = useState("");
-  const [company, setCompany] = useState("");
   const [sort, setSort] = useState("recent");
 
   const buildQuery = useCallback(() => {
     let query = supabase
       .from("portfolio_works")
       .select(
-        "id, title, description, category, stack, work_company, department, impact, work_at",
+        "id, title, description, category, stack, impact, work_at",
         { count: "exact" }
       );
 
@@ -38,7 +37,6 @@ export default function WorksBoard({
     if (q && q.trim() !== "") query = query.or(`title.ilike.%${q}%,description.ilike.%${q}%`);
     if (categories.length > 0) query = query.in("category", categories);
     if (stack) query = query.eq("stack", stack);
-    if (company) query = query.eq("work_company", company);
 
     // 프리뷰 vs 전체보기
     if (!all) {
@@ -50,7 +48,7 @@ export default function WorksBoard({
     }
 
     return query;
-  }, [q, categories, stack, company, sort, all, limit, page, pageSize]);
+  }, [q, categories, stack, sort, all, limit, page, pageSize]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -72,8 +70,7 @@ export default function WorksBoard({
   // select 옵션용 메타 (현재 로드된 리스트 기준)
   const meta = useMemo(() => {
     const stacks = Array.from(new Set(items.map(v => v.stack).filter(Boolean)));
-    const companies = Array.from(new Set(items.map(v => v.work_company).filter(Boolean)));
-    return { stacks, companies };
+    return { stacks };
   }, [items]);
 
   const totalPages = useMemo(() => {
@@ -88,7 +85,6 @@ export default function WorksBoard({
           q={q} setQ={setQ}
           categories={categories} setCategories={setCategories}
           stack={stack} setStack={setStack}
-          company={company} setCompany={setCompany}
           sort={sort} setSort={setSort}
           meta={meta}
         />

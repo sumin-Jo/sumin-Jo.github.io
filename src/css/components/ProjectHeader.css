@@ -199,7 +199,7 @@
 /* 카드 내부 전용 */
 .card-body { display:flex; flex-direction:column; gap:12px; height:100%; }
 
-.card .meta .company-badge {
+.card .meta {
   background: transparent !important;
   color: var(--brand, #63b3c7) !important;
   border: 1px solid var(--brand, #63b3c7) !important;
@@ -212,7 +212,7 @@
   justify-content: center;
   line-height: 1;
 }
-.card .meta .company-badge:hover { color:#fff; }
+.card .meta:hover { color:#fff; }
 
 
 .card .meta .period { margin-left: 0.5rem; font-size: 0.85rem; color: var(--muted); font-style: italic; }

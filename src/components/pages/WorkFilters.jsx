@@ -6,7 +6,6 @@ export default function WorkFilters({
   q, setQ,
   categories, setCategories,
   stack, setStack,
-  company, setCompany,
   sort, setSort,
   meta
 }) {
@@ -48,10 +47,10 @@ export default function WorkFilters({
           {meta.stacks.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
 
-        {(categories.length > 0 || stack || company || q) && (
+        {(categories.length > 0 || stack || q) && (
           <button
             className="reset-btn"
-            onClick={() => { setQ(""); setCategories([]); setStack(""); setCompany(""); }}
+            onClick={() => { setQ(""); setCategories([]); setStack("");  }}
           >
             초기화
           </button>

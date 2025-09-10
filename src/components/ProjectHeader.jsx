@@ -182,11 +182,8 @@ export default function Home({ projects = [] }) {
                   <div className="card-body">
                     <h3 className="card-title">{p.title}</h3>
 
-                    {(p.work_company || p.work_period) && (
+                    {(p.work_period) && (
                       <div className="meta">
-                        {p.work_company && (
-                          <span className="badge company-badge">{p.work_company}</span>
-                        )}
                         {p.work_period && <span className="period">{p.work_period}</span>}
                       </div>
                     )}

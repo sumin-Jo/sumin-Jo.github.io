@@ -66,7 +66,6 @@ export default function ProjectsAll() {
         title: r.title,
         description: r.description,
         stack: r.stack,
-        work_company: r.work_company ?? "",
         work_period: r.work_period ?? "",
         work_result: r.work_result ?? "",
         cover_url: r.image_path ?? "",
