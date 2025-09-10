@@ -4,6 +4,7 @@ import { supabase } from "./lib/supabaseClient";
 import ProjectHeader from "./components/ProjectHeader";
 import ProjectDetail from "./components/ProjectDetail";
 import WorksPage from "./components/pages/WorksPage";
+import WorksAll from "./components/pages/WorksAll";
 import Skills from "./components/Skills";
 import useReveal from "./hooks/useReveal";
 import ProjectsAll from "./components/pages/ProjectsAll";
@@ -69,6 +70,7 @@ export default function App() {
         <Route path="/project/:id" element={<ProjectDetail projects={projects} />} />
         <Route path="/skills" element={<Skills reveal={reveal} />} />
         <Route path="/projects" element={<ProjectsAll />} />
+        <Route path="/works" element={<WorksAll />} />
       </Routes>
     </>
   );

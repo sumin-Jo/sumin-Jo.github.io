@@ -113,7 +113,7 @@ export default function ProjectsAll() {
       </div>
 
       <header className="works-hero">
-        <h1 className="works-title">프로젝트 전체 보기</h1>
+        <h1 className="works-title">프로젝트</h1>
         <p className="works-sub">
           총 {totalCount}건 · 페이지 {page}/{totalPages}
         </p>
