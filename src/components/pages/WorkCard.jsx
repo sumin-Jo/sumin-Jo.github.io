@@ -72,6 +72,9 @@ export default function WorkCard({ item = {} }) {
     };
   }, [open]);
 
+  // ===== Accent color (category -> HEX) =====
+  const accent = accentColor(item?.category);
+
   return (
     <>
       <article className="work-card" onClick={openModal}>
@@ -85,8 +88,8 @@ export default function WorkCard({ item = {} }) {
 
         {/* ===== Metric Blocks (Card) ===== */}
         <div className="meta-stats blocks">
-          <StatBlock value={year} label="YEAR" ariaLabel={`연도 ${year}`} />
-          <StatBlock value={impactLabel} label="건수" ariaLabel={`건수 ${impactLabel}건`} />
+          <StatBlock value={year} label="YEAR" ariaLabel={`연도 ${year}`} accent={accent} />
+          <StatBlock value={impactLabel} label="건수" ariaLabel={`건수 ${impactLabel}건`} accent={accent} />
         </div>
       </article>
 
@@ -117,8 +120,8 @@ export default function WorkCard({ item = {} }) {
             <footer>
               {/* ===== Metric Blocks (Modal - bigger) ===== */}
               <div className="meta-stats blocks lg">
-                <StatBlock value={year} label="YEAR" ariaLabel={`연도 ${year}`} />
-                <StatBlock value={impactLabel} label="건수" ariaLabel={`건수 ${impactLabel}건`} />
+                <StatBlock value={year} label="YEAR" ariaLabel={`연도 ${year}`} accent={accent} />
+                <StatBlock value={impactLabel} label="건수" ariaLabel={`건수 ${impactLabel}건`} accent={accent} />
               </div>
 
               <button type="button" ref={closeBtnRef} onClick={closeModal} className="close-btn">
@@ -134,18 +137,21 @@ export default function WorkCard({ item = {} }) {
 }
 
 /* ===== New Mini Component: Metric Block ===== */
-function StatBlock({ value, label, ariaLabel }) {
+function StatBlock({ value, label, ariaLabel, accent }) {
   return (
-    <div className="stat-block" role="group" aria-label={ariaLabel}>
+    <div
+      className="stat-block"
+      role="group"
+      aria-label={ariaLabel}
+      style={{ '--accent': accent }}
+    >
       <div className="stat-block-num" aria-hidden="true">{value}</div>
       <div className="stat-block-label">{label}</div>
     </div>
   );
 }
 
-function CalendarIcon(){return(<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M7 2a1 1 0 0 0 0 2h1V2H7Zm9 0v2h1a1 1 0 1 0 0-2h-1ZM3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v11a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7Zm2 2v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9H5Z"/></svg>);}
-function BoltIcon(){return(<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M13 2 3 14h6l-2 8 10-12h-6l2-8z"/></svg>);}
-
+/* 카테고리 -> 배지 클래스 */
 function colorKey(c){
   switch(c){
     case "bugfix": return "k-red";
@@ -155,5 +161,18 @@ function colorKey(c){
     case "policy": return "k-emerald";
     case "maintenance": return "k-blue";
     default: return "k-gray";
+  }
+}
+
+/* 카테고리 -> 포인트 색(배지와 동일 팔레트) */
+function accentColor(c){
+  switch(c){
+    case "bugfix": return "#ef4444";
+    case "datafix": return "#f59e0b";
+    case "feature": return "#06b6d4";
+    case "ops": return "#8b5cf6";
+    case "policy": return "#10b981";
+    case "maintenance": return "#3b82f6";
+    default: return "#6b7280";
   }
 }
