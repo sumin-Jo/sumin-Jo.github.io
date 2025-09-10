@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 const CATE = ["bugfix", "datafix", "feature", "ops", "policy", "maintenance"];
 
 export default function WorkFilters({
   q, setQ,
   categories, setCategories,
-  stack, setStack,
+  stack, setStack,          
   sort, setSort,
   meta
 }) {
@@ -13,6 +13,17 @@ export default function WorkFilters({
     if (categories.includes(c)) setCategories(categories.filter(v => v !== c));
     else setCategories([...categories, c]);
   };
+
+  const tokenStacks = useMemo(() => {
+    const raw = Array.isArray(meta?.stacks) ? meta.stacks : [];
+    const tokens = raw.flatMap(s =>
+      String(s)
+        .split("/")                 
+        .map(t => t.trim())        
+        .filter(Boolean)            
+    );
+    return Array.from(new Set(tokens));
+  }, [meta?.stacks]);
 
   return (
     <div className="works-filters">
@@ -44,13 +55,13 @@ export default function WorkFilters({
       <div className="row selects-row">
         <select value={stack} onChange={e => setStack(e.target.value)}>
           <option value="">전체 스택</option>
-          {meta.stacks.map(s => <option key={s} value={s}>{s}</option>)}
+          {tokenStacks.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
 
         {(categories.length > 0 || stack || q) && (
           <button
             className="reset-btn"
-            onClick={() => { setQ(""); setCategories([]); setStack("");  }}
+            onClick={() => { setQ(""); setCategories([]); setStack(""); }}
           >
             초기화
           </button>

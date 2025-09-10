@@ -6,10 +6,10 @@ import WorkCard from "./WorkCard";
 
 export default function WorksBoard({
   limit = 9,                 // 프리뷰: 9개
-  all = false,               // 전체 페이지: true 로 주면 전체 조회
+  all = false,               // 전체 페이지: true
   hideFilters = false,
-  page = 1,                  // 전체보기 모드일 때 현재 페이지
-  pageSize = 12,             // 전체보기 모드일 때 페이지 사이즈
+  page = 1,                  // 전체보기 모드 현재 페이지
+  pageSize = 12,             // 전체보기 페이지 사이즈
   onPageChange               // (num:number)=>void
 }) {
   const [items, setItems] = useState([]);
@@ -21,11 +21,58 @@ export default function WorksBoard({
   const [stack, setStack] = useState("");
   const [sort, setSort] = useState("recent");
 
+  // 전역 옵션용 스택(토큰) 메타
+  const [metaStacks, setMetaStacks] = useState([]);
+
+  const tokenizeStacks = (v) =>
+    String(v || "")
+      .split("/")
+      .map(s => s.trim().toLowerCase())
+      .filter(Boolean);
+
+  // 전역 메타 스택 로드 (옵션 안정화)
+  const loadStacksMeta = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("portfolio_works")
+      .select("stack"); 
+
+    if (error) {
+      console.error("stacks meta fetch error:", error);
+      setMetaStacks([]);
+      return;
+    }
+    const tok = new Set();
+    (data || []).forEach(row => tokenizeStacks(row.stack).forEach(t => tok.add(t.toUpperCase())));
+    setMetaStacks(Array.from(tok)); // 보기엔 대문자
+  }, []);
+
+  useEffect(() => { loadStacksMeta(); }, [loadStacksMeta]);
+
+  // 전체보기 모드에서 필터가 바뀌면 1페이지로
+  useEffect(() => {
+    if (all && onPageChange) onPageChange(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q, categories, stack, sort]);
+
+  const buildStackOrExpr = (s) => {
+    const esc = s; // 필요시 특수문자 escape 추가 고려
+    return [
+      `stack.eq.${esc}`,
+      `stack.ilike.${esc}`,
+      `stack.ilike.${esc}/%`,
+      `stack.ilike.${esc} /%`,
+      `stack.ilike.%/${esc}`,
+      `stack.ilike.%/ ${esc}`,
+      `stack.ilike.%/${esc}/%`,
+      `stack.ilike.%/ ${esc} /%`
+    ].join(",");
+  };
+
   const buildQuery = useCallback(() => {
     let query = supabase
       .from("portfolio_works")
       .select(
-        "id, title, description, category, stack, impact, work_at",
+        "id, title, description, category, stack, impact, work_at, created_at",
         { count: "exact" }
       );
 
@@ -34,9 +81,15 @@ export default function WorksBoard({
     else query = query.order("id", { ascending: false });
 
     // 검색/필터
-    if (q && q.trim() !== "") query = query.or(`title.ilike.%${q}%,description.ilike.%${q}%`);
+    if (q && q.trim() !== "") {
+      const kw = q.trim();
+      query = query.or(`title.ilike.%${kw}%,description.ilike.%${kw}%`);
+    }
     if (categories.length > 0) query = query.in("category", categories);
-    if (stack) query = query.eq("stack", stack);
+
+    if (stack) {
+      query = query.ilike("stack", `%${stack}%`);
+    }
 
     // 프리뷰 vs 전체보기
     if (!all) {
@@ -57,21 +110,23 @@ export default function WorksBoard({
       console.error("works fetch error:", error);
       setItems([]);
       setTotalCount(0);
-    } else {
-      setItems(data || []);
-      setTotalCount(typeof count === "number" ? count : (data?.length || 0));
+      setLoading(false);
+      return;
     }
+
+    const filtered = (() => {
+      if (!stack) return data || [];
+      const s = stack.toLowerCase();
+      return (data || []).filter(it => tokenizeStacks(it.stack).includes(s));
+    })();
+
+    setItems(filtered);
+    setTotalCount(typeof count === "number" ? count : (data?.length || 0));
     setLoading(false);
-  }, [buildQuery]);
+  }, [buildQuery, stack]);
 
   // 필터/정렬/페이지 바뀔 때마다 재조회
   useEffect(() => { load(); }, [load]);
-
-  // select 옵션용 메타 (현재 로드된 리스트 기준)
-  const meta = useMemo(() => {
-    const stacks = Array.from(new Set(items.map(v => v.stack).filter(Boolean)));
-    return { stacks };
-  }, [items]);
 
   const totalPages = useMemo(() => {
     if (!all) return 1;
@@ -86,7 +141,7 @@ export default function WorksBoard({
           categories={categories} setCategories={setCategories}
           stack={stack} setStack={setStack}
           sort={sort} setSort={setSort}
-          meta={meta}
+          meta={{ stacks: metaStacks }}
         />
       )}
 
