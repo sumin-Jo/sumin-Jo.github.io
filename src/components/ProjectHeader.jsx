@@ -6,8 +6,24 @@ import "./../css/components/ProjectHeader.css";
 export default function Home({ projects = [] }) {
   const reveal = useReveal();
 
+  // priority 내림차순 → created_at 최신순으로 정렬
+  const sorted = React.useMemo(() => {
+    const pri = (v) => {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : -1; // 없거나 NaN이면 뒤로 밀기
+    };
+    const toTime = (v) => (v ? new Date(v).getTime() : 0);
+
+    const arr = Array.isArray(projects) ? [...projects] : [];
+    return arr.sort((a, b) => {
+      const d = pri(b.priority) - pri(a.priority);
+      if (d !== 0) return d;
+      return toTime(b.created_at) - toTime(a.created_at);
+    });
+  }, [projects]);
+
   // 홈에서는 상위 6개만 노출
-  const top6 = Array.isArray(projects) ? projects.slice(0, 6) : [];
+  const top6 = React.useMemo(() => sorted.slice(0, 6), [sorted]);
   const hasMore = Array.isArray(projects) && projects.length > 6;
 
   return (
@@ -57,7 +73,7 @@ export default function Home({ projects = [] }) {
 
             <a href="https://github.com/sumin-Jo" target="_blank" rel="noreferrer" className="chip" aria-label="GitHub 열기">
               <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <path d="M12 0a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.1c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.76.08-.75.08-.75 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.96 0-1.32.47-2.39 1.23-3.24-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.85 1.23 1.92 1.23 3.24 0 4.63-2.8 5.66-5.48 5.96.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58A12 12 0 0 0 12 0z" />
+                <path d="M12 0a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.1c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.76.08-.75.08-.75 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.96 0-1.32.47-2.39 1.23-3.24-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.85 1.23 1.92 1.23 3.24 0 4.63-2.8 5.66-5.48 5.96.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58A12 12 0 0 0 12 0z" />
               </svg>
               <span>GitHub</span>
             </a>
@@ -67,7 +83,7 @@ export default function Home({ projects = [] }) {
                 <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
               </svg>
               <span>Gwangjin-gu, Seoul</span>
-            </span>            
+            </span>
           </div>
 
           <nav className="cta">
@@ -92,73 +108,112 @@ export default function Home({ projects = [] }) {
         {top6.length === 0 ? (
           <p className="empty">아직 등록된 프로젝트가 없습니다.</p>
         ) : (
-          <div className="grid">
-            {top6.map((p, i) => (
-              <article
-                className="card glass hover-raise"
-                key={p.id ?? `proj-${i}`}
-                ref={reveal}
-              >
-                <div className="card-body">
-                  <h3 className="card-title">{p.title}</h3>
+          <div
+            className="works-board"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+              gap: 16,
+            }}
+          >
+            {top6.map((p, i) => {
+              const techs = (p.stack || "")
+                .split("/")
+                .map((t) => t.trim())
+                .filter(Boolean);
 
-                  {/* 회사명 + 기간 */}
-                  {(p.work_company || p.work_period) && (
-                    <div className="meta">
-                      {p.work_company && (
-                        <span className="badge company-badge">{p.work_company}</span>
-                      )}
-                      {p.work_period && (
-                        <span className="period">{p.work_period}</span>
-                      )}
+              return (
+                <article
+                  className="card glass hover-raise"
+                  key={p.id ?? `proj-${i}`}
+                  ref={reveal}
+                  aria-label={p.title}
+                >
+                  {/* 커버 이미지(있으면) */}
+                  {p.cover_url && (
+                    <div
+                      className="card-cover"
+                      style={{
+                        aspectRatio: "16 / 9",
+                        overflow: "hidden",
+                        borderTopLeftRadius: 16,
+                        borderTopRightRadius: 16,
+                      }}
+                    >
+                      <img
+                        src={p.cover_url}
+                        alt=""
+                        loading="lazy"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          display: "block",
+                        }}
+                      />
                     </div>
                   )}
 
-                  {/* 기술 스택 */}
-                  {p.stack && (
-                    <div className="stack">
-                      {p.stack.split(",").map((tech) => (
-                        <span key={tech.trim()} className="badge tech">
-                          {tech.trim()}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  <div className="card-body">
+                    <h3 className="card-title">{p.title}</h3>
 
-                  {p.description && <p className="desc">{p.description}</p>}
-
-                  <div className="links">
-                    {p.repo && (
-                      <a
-                        className="btn tiny"
-                        href={p.repo}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Repo ↗
-                      </a>
+                    {/* 회사명 + 기간 */}
+                    {(p.work_company || p.work_period) && (
+                      <div className="meta">
+                        {p.work_company && (
+                          <span className="badge company-badge">{p.work_company}</span>
+                        )}
+                        {p.work_period && <span className="period">{p.work_period}</span>}
+                      </div>
                     )}
-                    {p.demo && (
-                      <a
-                        className="btn tiny"
-                        href={p.demo}
-                        target="_blank"
-                        rel="noreferrer"
+
+                    {/* 기술 스택(ProjectsAll과 일관: '/' 분리) */}
+                    {techs.length > 0 && (
+                      <div className="stack" aria-label="사용 기술">
+                        {techs.map((t) => (
+                          <span key={t} className="badge tech">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* 설명 */}
+                    {p.description && <p className="desc">{p.description}</p>}
+
+                    {p.work_result && (
+                      <p className="desc" style={{ marginTop: 8 }}>
+                        <strong>결과</strong> · {p.work_result}
+                      </p>
+                    )}
+
+                    {(p.repo || p.demo) && (
+                      <div
+                        className="links"
+                        style={{ marginTop: 12, display: "flex", gap: 8, flexWrap: "wrap" }}
                       >
-                        Demo ↗
-                      </a>
+                        {p.repo && (
+                          <a className="btn tiny" href={p.repo} target="_blank" rel="noreferrer">
+                            Repo ↗
+                          </a>
+                        )}
+                        {p.demo && (
+                          <a className="btn tiny" href={p.demo} target="_blank" rel="noreferrer">
+                            Demo ↗
+                          </a>
+                        )}
+                      </div>
                     )}
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         )}
 
-        {/* 하단에도 '더보기' 버튼 (모바일 고려) */}
         {hasMore && (
           <div className="section-foot">
-            <Link to="/projects" className="btn ghost">
+            <Link to="/projects" className="btn ghost" aria-label="프로젝트 전체 보기">
               프로젝트 전체 보기
             </Link>
           </div>

@@ -22,7 +22,7 @@ export default function ProjectsAll() {
 
   const totalPages = useMemo(() => Math.max(1, Math.ceil(totalCount / PAGE_SIZE)), [totalCount]);
 
-  // 총 개수 구하기(가벼운 HEAD 카운트)
+  // 총 개수 구하기
   useEffect(() => {
     (async () => {
       const { count, error } = await supabase
@@ -66,7 +66,7 @@ export default function ProjectsAll() {
         title: r.title,
         description: r.description,
         stack: r.stack,
-        work_company: r.work_compan ?? "",
+        work_company: r.work_company ?? "",
         work_period: r.work_period ?? "",
         work_result: r.work_result ?? "",
         cover_url: r.image_path ?? "",
@@ -159,7 +159,7 @@ export default function ProjectsAll() {
 
                   {it.stack && (
                     <div className="stack">
-                      {it.stack.split(",").map((t) => (
+                      {it.stack.split("/").map((t) => (
                         <span key={t.trim()} className="badge tech">
                           {t.trim()}
                         </span>
