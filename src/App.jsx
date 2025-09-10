@@ -63,7 +63,7 @@ export default function App() {
             <>
               <ProjectHeader projects={projects} />
               <Skills reveal={reveal} />
-              <WorksPage/>
+              <WorksPage reveal={reveal}/>
             </>
           }
         />
