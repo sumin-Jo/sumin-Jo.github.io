@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&display=swap');
 
 :root {
+  --font-base: "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR",
+               "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-script-1: "Great Vibes", cursive;
+  --font-script-2: "Alex Brush", cursive;             
   /* Skills 색상 */
   --skill-css: #3b82f6;
   --skill-html: #f97316;
@@ -21,7 +25,8 @@ body.light {
 }
 
 * { box-sizing: border-box }
-html, body { height: 100% }
+html, body { height: 100% ; font-family: var(--font-base); }
+body, button, input, select, textarea { font-family: inherit; }
 body {
   --bg: #121212;
   --text: #e0e0e0;
@@ -32,6 +37,9 @@ body {
   --pill-border: rgba(255,255,255,0.18);
   background: var(--bg);
   color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .wrap {

@@ -1,16 +1,30 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import useReveal from "../hooks/useReveal";
+import ProjectModal from "../components/ProjectModal";
 import "./../css/components/ProjectHeader.css";
 
 export default function Home({ projects = [] }) {
   const reveal = useReveal();
 
-  // priority 내림차순 → created_at 최신순으로 정렬
+  // 모달 상태
+  const [selected, setSelected] = React.useState(null);
+  React.useEffect(() => {
+    if (selected) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [selected]);
+
+  const onClose = React.useCallback(() => setSelected(null), []);
+  const onCardClick = React.useCallback((p) => setSelected(p), []);
+
+  // priority 내림차순 → created_at 최신순
   const sorted = React.useMemo(() => {
     const pri = (v) => {
       const n = Number(v);
-      return Number.isFinite(n) ? n : -1; // 없거나 NaN이면 뒤로 밀기
+      return Number.isFinite(n) ? n : -1;
     };
     const toTime = (v) => (v ? new Date(v).getTime() : 0);
 
@@ -43,7 +57,6 @@ export default function Home({ projects = [] }) {
               <span className="char">i</span>
               <span className="char">n</span>
             </span>
-
             <span className="name-line" id="line2">
               <span className="char">J</span>
               <span className="char">o</span>
@@ -71,7 +84,13 @@ export default function Home({ projects = [] }) {
               <span>suminjo725@gmail.com</span>
             </a>
 
-            <a href="https://github.com/sumin-Jo" target="_blank" rel="noreferrer" className="chip" aria-label="GitHub 열기">
+            <a
+              href="https://github.com/sumin-Jo"
+              target="_blank"
+              rel="noreferrer"
+              className="chip"
+              aria-label="GitHub 열기"
+            >
               <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
                 <path d="M12 0a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.1c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.76.08-.75.08-.75 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.96 0-1.32.47-2.39 1.23-3.24-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.85 1.23 1.92 1.23 3.24 0 4.63-2.8 5.66-5.48 5.96.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58A12 12 0 0 0 12 0z" />
               </svg>
@@ -128,6 +147,12 @@ export default function Home({ projects = [] }) {
                   key={p.id ?? `proj-${i}`}
                   ref={reveal}
                   aria-label={p.title}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => onCardClick(p)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") onCardClick(p);
+                  }}
                 >
                   {/* 커버 이미지(있으면) */}
                   {p.cover_url && (
@@ -157,7 +182,6 @@ export default function Home({ projects = [] }) {
                   <div className="card-body">
                     <h3 className="card-title">{p.title}</h3>
 
-                    {/* 회사명 + 기간 */}
                     {(p.work_company || p.work_period) && (
                       <div className="meta">
                         {p.work_company && (
@@ -167,7 +191,6 @@ export default function Home({ projects = [] }) {
                       </div>
                     )}
 
-                    {/* 기술 스택(ProjectsAll과 일관: '/' 분리) */}
                     {techs.length > 0 && (
                       <div className="stack" aria-label="사용 기술">
                         {techs.map((t) => (
@@ -178,7 +201,6 @@ export default function Home({ projects = [] }) {
                       </div>
                     )}
 
-                    {/* 설명 */}
                     {p.description && <p className="desc">{p.description}</p>}
 
                     {p.work_result && (
@@ -191,6 +213,7 @@ export default function Home({ projects = [] }) {
                       <div
                         className="links"
                         style={{ marginTop: 12, display: "flex", gap: 8, flexWrap: "wrap" }}
+                        onClick={(e) => e.stopPropagation()} // 링크 클릭은 모달 열림 막기
                       >
                         {p.repo && (
                           <a className="btn tiny" href={p.repo} target="_blank" rel="noreferrer">
@@ -219,6 +242,9 @@ export default function Home({ projects = [] }) {
           </div>
         )}
       </section>
+
+      {/* 모달 */}
+      <ProjectModal project={selected} onClose={onClose} />
     </main>
   );
 }
