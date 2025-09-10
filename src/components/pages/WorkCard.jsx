@@ -6,7 +6,7 @@ export default function WorkCard({ item }) {
 
   const uid = useId();
   const titleId = `work-title-${uid}`;
-  const descId  = `work-desc-${uid}`;
+  const descId = `work-desc-${uid}`; // narrow space fixed
 
   const dialogRef = useRef(null);
   const closeBtnRef = useRef(null);
@@ -15,6 +15,21 @@ export default function WorkCard({ item }) {
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
+  // ===== Derived values: Year/Count =====
+  const year = (() => {
+    const s = (item?.work_at ?? "").toString();
+    if (s.length >= 4 && /^\d{4}/.test(s)) return s.slice(0, 4);
+    const d = new Date(item?.work_at);
+    return Number.isFinite(d.getTime()) ? String(d.getFullYear()) : "—";
+  })();
+
+  const impactCount = (() => {
+    const n = Number(item?.impact);
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+  })();
+  const impactLabel = new Intl.NumberFormat("ko-KR").format(impactCount);
+
+  // ===== Accessibility/Focus Lock =====
   useEffect(() => {
     if (!open) return;
 
@@ -68,15 +83,29 @@ export default function WorkCard({ item }) {
   return (
     <>
       <article className="work-card" onClick={openModal}>
-        <div className={`dot ${colorKey(item.category)}`} />
         <div className="meta-line">
           <span className={`badge ${colorKey(item.category)}`}>{item.category}</span>
-          <span className="sub">
-            {item.stack}
-          </span>
+          <span className="sub">{item.stack}</span>
         </div>
+
         <h3 className="ttl">{item.title}</h3>
         <p className="desc">{item.description}</p>
+
+        {/* ===== Core Metric Chips (Card) ===== */}
+        <div className="meta-stats chips">
+          <StatChip
+            variant="year"
+            value={year}
+            label="YEAR"
+            ariaLabel={`연도 ${year}`}
+          />
+          <StatChip
+            variant="count"
+            value={impactLabel}
+            label="건수"
+            ariaLabel={`건수 ${impactLabel}건`}
+          />
+        </div>
       </article>
 
       {open &&
@@ -84,9 +113,7 @@ export default function WorkCard({ item }) {
           <div
             className="work-modal"
             role="presentation"
-            onMouseDown={(e) => {
-              if (e.target === e.currentTarget) closeModal();
-            }}
+            onMouseDown={(e) => { if (e.target === e.currentTarget) closeModal(); }}
           >
             <div
               ref={dialogRef}
@@ -97,18 +124,32 @@ export default function WorkCard({ item }) {
               aria-describedby={descId}
               onMouseDown={(e) => e.stopPropagation()}
             >
-              <header>
-                <span className={`badge ${colorKey(item.category)}`}>{item.category}</span>
-                <h3 id={titleId}>{item.title}</h3>
-                <p className="sub">
-                  {item.stack}
-                </p>
+              <header className="work-dialog-head">
+                <div className="work-dialog-left">
+                  <span className={`badge ${colorKey(item.category)}`}>{item.category}</span>
+                  <h3 id={titleId}>{item.title}</h3>
+                  <p className="sub">{item.stack}</p>
+                </div>
+
+                {/* ===== Core Metric Chips (Modal: Larger) ===== */}
+                <div className="meta-stats chips lg">
+                  <StatChip
+                    variant="year"
+                    value={year}
+                    label="YEAR"
+                    ariaLabel={`연도 ${year}`}
+                  />
+                  <StatChip
+                    variant="count"
+                    value={impactLabel}
+                    label="건수"
+                    ariaLabel={`건수 ${impactLabel}건`}
+                  />
+                </div>
               </header>
 
               <section>
-                <p id={descId} className="desc-lg">
-                  {item.description}
-                </p>
+                <p id={descId} className="desc-lg">{item.description}</p>
               </section>
 
               <footer>
@@ -129,21 +170,46 @@ export default function WorkCard({ item }) {
   );
 }
 
+/* ===== Mini Component: Metric Chip ===== */
+function StatChip({ variant, value, label, ariaLabel }) {
+  const Icon = variant === "year" ? CalendarIcon : BoltIcon;
+  return (
+    <div className={`stat-chip ${variant}`} role="group" aria-label={ariaLabel}>
+      <div className="chip-icon">
+        <Icon />
+      </div>
+      <div className="chip-main">
+        <span className="chip-num">{value}</span>
+        <span className="chip-label">{label}</span>
+      </div>
+    </div>
+  );
+}
+
+function CalendarIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+      <path d="M7 2a1 1 0 0 0 0 2h1V2H7Zm9 0v2h1a1 1 0 1 0 0-2h-1ZM3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v11a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7Zm2 2v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9H5Z"/>
+    </svg>
+  );
+}
+
+function BoltIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+      <path d="M13 2 3 14h6l-2 8 10-12h-6l2-8z"/>
+    </svg>
+  );
+}
+
 function colorKey(c) {
   switch (c) {
-    case "bugfix":
-      return "k-red";
-    case "datafix":
-      return "k-amber";
-    case "feature":
-      return "k-cyan";
-    case "ops":
-      return "k-violet";
-    case "policy":
-      return "k-emerald";
-    case "maintenance":
-      return "k-blue";
-    default:
-      return "k-gray";
+    case "bugfix": return "k-red";
+    case "datafix": return "k-amber";
+    case "feature": return "k-cyan";
+    case "ops": return "k-violet";
+    case "policy": return "k-emerald";
+    case "maintenance": return "k-blue";
+    default: return "k-gray";
   }
 }
