@@ -16,23 +16,12 @@ export default function Home({ projects = [] }) {
   const onClose = React.useCallback(() => setSelected(null), []);
   const onCardClick = React.useCallback((p) => setSelected(p), []);
 
-  // priority 내림차순 → created_at 최신순
-  const sorted = React.useMemo(() => {
-    const pri = (v) => {
-      const n = Number(v);
-      return Number.isFinite(n) ? n : -1;
-    };
-    const toTime = (v) => (v ? new Date(v).getTime() : 0);
-    const arr = Array.isArray(projects) ? [...projects] : [];
-    return arr.sort((a, b) => {
-      const d = pri(b.priority) - pri(a.priority);
-      if (d !== 0) return d;
-      return toTime(b.created_at) - toTime(a.created_at);
-    });
+  // 서버 정렬 결과에서 상위 6개만
+  const top6 = React.useMemo(() => {
+    const arr = Array.isArray(projects) ? projects : [];
+    return arr.slice(0, 6);
   }, [projects]);
 
-  // 홈에서는 상위 6개만
-  const top6 = React.useMemo(() => sorted.slice(0, 6), [sorted]);
   const hasMore = Array.isArray(projects) && projects.length > 6;
 
   return (

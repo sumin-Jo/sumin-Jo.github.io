@@ -23,7 +23,8 @@ export default function App() {
       const { data, error } = await supabase
         .from("portfolio_projects")
         .select("*")
-        .order("id", { ascending: true });
+        .order("priority", { ascending: true })
+        .order("created_at", { ascending: false });
 
       if (error) console.error("DB fetch error:", error);
       setProjects(data || []);
