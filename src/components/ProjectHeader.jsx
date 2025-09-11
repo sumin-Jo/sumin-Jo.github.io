@@ -10,11 +10,7 @@ export default function Home({ projects = [] }) {
   // 모달 상태
   const [selected, setSelected] = React.useState(null);
   React.useEffect(() => {
-    if (selected) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = selected ? "hidden" : "";
   }, [selected]);
 
   const onClose = React.useCallback(() => setSelected(null), []);
@@ -27,7 +23,6 @@ export default function Home({ projects = [] }) {
       return Number.isFinite(n) ? n : -1;
     };
     const toTime = (v) => (v ? new Date(v).getTime() : 0);
-
     const arr = Array.isArray(projects) ? [...projects] : [];
     return arr.sort((a, b) => {
       const d = pri(b.priority) - pri(a.priority);
@@ -36,7 +31,7 @@ export default function Home({ projects = [] }) {
     });
   }, [projects]);
 
-  // 홈에서는 상위 6개만 노출
+  // 홈에서는 상위 6개만
   const top6 = React.useMemo(() => sorted.slice(0, 6), [sorted]);
   const hasMore = Array.isArray(projects) && projects.length > 6;
 
@@ -127,14 +122,7 @@ export default function Home({ projects = [] }) {
         {top6.length === 0 ? (
           <p className="empty">아직 등록된 프로젝트가 없습니다.</p>
         ) : (
-          <div
-            className="works-board"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-              gap: 16,
-            }}
-          >
+          <div className="works-board home-wide">
             {top6.map((p, i) => {
               const techs = (p.stack || "")
                 .split("/")
@@ -154,12 +142,11 @@ export default function Home({ projects = [] }) {
                     if (e.key === "Enter" || e.key === " ") onCardClick(p);
                   }}
                 >
-                  {/* 커버 이미지(있으면) */}
                   {p.cover_url && (
                     <div
                       className="card-cover"
                       style={{
-                        aspectRatio: "16 / 9",
+                        aspectRatio: "21 / 9",
                         overflow: "hidden",
                         borderTopLeftRadius: 16,
                         borderTopRightRadius: 16,
@@ -169,12 +156,7 @@ export default function Home({ projects = [] }) {
                         src={p.cover_url}
                         alt=""
                         loading="lazy"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          display: "block",
-                        }}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                       />
                     </div>
                   )}
@@ -182,45 +164,35 @@ export default function Home({ projects = [] }) {
                   <div className="card-body">
                     <h3 className="card-title">{p.title}</h3>
 
-                    {(p.work_period) && (
+                    {p.work_period && (
                       <div className="meta">
-                        {p.work_period && <span className="period">{p.work_period}</span>}
+                        <span className="period">{p.work_period}</span>
                       </div>
                     )}
 
                     {techs.length > 0 && (
                       <div className="stack" aria-label="사용 기술">
                         {techs.map((t) => (
-                          <span key={t} className="badge tech">
-                            {t}
-                          </span>
+                          <span key={t} className="badge tech">{t}</span>
                         ))}
                       </div>
                     )}
 
-                    {p.description && <p className="desc">{p.description}</p>}
+                    {p.role_contribution && <p className="desc">{p.role_contribution}</p>}
 
                     {p.work_result && (
-                      <p className="desc" style={{ marginTop: 8 }}>
+                      <p className="desc" style={{ marginTop: 6 }}>
                         <strong>결과</strong> · {p.work_result}
                       </p>
                     )}
 
                     {(p.repo || p.demo) && (
-                      <div
-                        className="links"
-                        style={{ marginTop: 12, display: "flex", gap: 8, flexWrap: "wrap" }}
-                        onClick={(e) => e.stopPropagation()} // 링크 클릭은 모달 열림 막기
-                      >
+                      <div className="links" onClick={(e) => e.stopPropagation()}>
                         {p.repo && (
-                          <a className="btn tiny" href={p.repo} target="_blank" rel="noreferrer">
-                            Repo ↗
-                          </a>
+                          <a className="btn tiny" href={p.repo} target="_blank" rel="noreferrer">Repo ↗</a>
                         )}
                         {p.demo && (
-                          <a className="btn tiny" href={p.demo} target="_blank" rel="noreferrer">
-                            Demo ↗
-                          </a>
+                          <a className="btn tiny" href={p.demo} target="_blank" rel="noreferrer">Demo ↗</a>
                         )}
                       </div>
                     )}
@@ -240,7 +212,7 @@ export default function Home({ projects = [] }) {
         )}
       </section>
 
-      {/* 모달 */}
+      {/* 외부 모달 컴포넌트 사용 */}
       <ProjectModal project={selected} onClose={onClose} />
     </main>
   );
