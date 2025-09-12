@@ -54,7 +54,6 @@ export default function WorkHistory({ showMoreHref, all = false, limit = 9 }) {
       let query = supabase
         .from("portfolio_works")
         .select(cols, { count: "exact" })
-        .or("visibility.is.true,visibility.eq.true,visibility.eq.Y,visibility.eq.1")
         .order("work_at", { ascending: false, nullsFirst: false })
         .order("id", { ascending: false });
 
