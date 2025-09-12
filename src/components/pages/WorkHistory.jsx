@@ -54,7 +54,6 @@ export default function WorkHistory({ showMoreHref, all = false, limit = 9 }) {
       let query = supabase
         .from("portfolio_works")
         .select(cols, { count: "exact" })
-        // visibility 혼재 타입 대응
         .or("visibility.is.true,visibility.eq.true,visibility.eq.Y,visibility.eq.1")
         .order("work_at", { ascending: false, nullsFirst: false })
         .order("id", { ascending: false });
@@ -121,7 +120,6 @@ export default function WorkHistory({ showMoreHref, all = false, limit = 9 }) {
     const id = `year-${y}`;
     const el = document.getElementById(id);
     if (el) smoothScrollTo(el, 100);
-    // 주소창 해시 동기화(선택): 라우터 충돌 시 생략해도 됨
     if (history && history.replaceState) {
       history.replaceState(null, "", `#${id}`);
     }
@@ -150,14 +148,9 @@ export default function WorkHistory({ showMoreHref, all = false, limit = 9 }) {
         {/* 사이드바 */}
         <aside className="wh-sidebar">
           <div className="wh-side-title">연도별 보기</div>
-          <div className="wh-meta">
-            항목: {items.length}
-          </div>
-          {err && <div className="wh-meta wh-error">오류: {err}</div>}
           <ul className="wh-nav" id="year-nav-menu">
             {years.map((y) => (
               <li key={y}>
-                {/* data-target으로 스파이 매칭, href는 # 유지하되 기본동작 차단 */}
                 <a
                   href={`#year-${y}`}
                   data-target={`year-${y}`}
