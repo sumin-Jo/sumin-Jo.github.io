@@ -1,0 +1,390 @@
+/* =============================
+   WorkCard Component Styles (pruned)
+   ============================= */
+
+/* ---- Tokens ---- */
+:root {
+  --wc-panel: var(--panel, rgba(20, 20, 20, 1));
+  --wc-text: var(--text, #e5e7eb);
+  --wc-muted: var(--muted, #9aa3b2);
+  --wc-border: var(--border, rgba(127, 127, 127, 0.15));
+  --wc-overlay: color-mix(in oklab, #000 66%, transparent);
+}
+body.light {
+  --wc-panel: var(--panel, #fff);
+  --wc-text: var(--text, #111827);
+  --wc-muted: var(--muted, #6b7280);
+  --wc-border: var(--border, rgba(0, 0, 0, 0.12));
+  --wc-overlay: color-mix(in oklab, #000 30%, transparent);
+}
+
+/* ---- Card ---- */
+.work-card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--wc-border);
+  background: var(--wc-panel);
+  border-radius: 14px;
+  transition: transform 0.12s ease, filter 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.work-card:hover {
+  filter: brightness(0.98);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+}
+.work-card:active {
+  transform: translateY(1px);
+}
+.work-card:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--brand, #5ca2ff) 80%, transparent);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+/* Year Ribbon */
+.wc-year-ribbon {
+  position: absolute;
+  top: 0;
+  right: 18px;
+  height: 28px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--wc-text);
+  background: color-mix(in oklab, var(--accent, #6b7280) 40%, transparent);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ---- Title & Desc ---- */
+.wc-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--wc-text);
+}
+.wc-desc {
+  margin: 0;
+  color: var(--wc-text);
+  opacity: 0.8;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+.wc-topline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 28px;
+}
+.wc-stack {
+  color: var(--wc-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+  justify-self: end;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ----- Body ----- */
+.work-dialog-body-v4 {
+  gap: 10px;
+  padding-top: 10px;
+}
+.desc-lg {
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+/* ---- Badge ---- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--wc-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--wc-text);
+}
+body.light .badge {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Palette keys (match JS colorKey) */
+.k-red {
+  --k: #ef4444;
+}
+.k-amber {
+  --k: #f59e0b;
+}
+.k-cyan {
+  --k: #06b6d4;
+}
+.k-violet {
+  --k: #8b5cf6;
+}
+.k-emerald {
+  --k: #10b981;
+}
+.k-blue {
+  --k: #3b82f6;
+}
+.k-gray {
+  --k: #6b7280;
+}
+
+.badge.k-red,
+.badge.k-amber,
+.badge.k-cyan,
+.badge.k-violet,
+.badge.k-emerald,
+.badge.k-blue,
+.badge.k-gray {
+  color: var(--k);
+  background: color-mix(in oklab, var(--k) 10%, transparent);
+  border-color: color-mix(in oklab, var(--k) 30%, transparent);
+}
+body.light .badge.k-red,
+body.light .badge.k-amber,
+body.light .badge.k-cyan,
+body.light .badge.k-violet,
+body.light .badge.k-emerald,
+body.light .badge.k-blue,
+body.light .badge.k-gray {
+  background: color-mix(in oklab, var(--k) 10%, #fff);
+  border-color: color-mix(in oklab, var(--k) 30%, #fff);
+}
+
+/* ---- Footer ---- */
+/* Footer */
+.work-dialog-footer-v4 {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Close Button */
+.close-btn-v4 {
+  min-width: 72px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid var(--wc-border);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+
+  /* 다른 버튼과 통일감 주는 배경 */
+  background: color-mix(in oklab, var(--accent, #6b7280) 12%, transparent);
+  color: var(--wc-text);
+  transition: background 0.15s ease, transform 0.1s ease, filter 0.15s ease;
+}
+
+.close-btn-v4:hover {
+  filter: brightness(0.97);
+}
+
+.close-btn-v4:active {
+  transform: translateY(1px);
+}
+
+.close-btn-v4:focus-visible {
+  outline: 2px solid
+    color-mix(in oklab, var(--accent, #5ca2ff) 80%, transparent);
+  outline-offset: 2px;
+}
+.wc-metric {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.wc-metric-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--wc-muted);
+}
+.wc-metric-num {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--wc-text);
+  line-height: 1;
+}
+
+/* ---- Modal Backdrop ---- */
+.work-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: var(--wc-overlay);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  backdrop-filter: blur(10px) saturate(120%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  animation: wc-fade 0.18s ease-out;
+}
+@keyframes wc-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---- Dialog V4 ---- */
+.work-dialog.v4 {
+  position: relative;
+  max-width: 600px;
+  width: min(94vw, 600px);
+  padding: 18px;
+  border-radius: 14px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, #fff 6%, transparent),
+    transparent 60%
+  );
+  border: 1px solid var(--wc-border);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transform: translateY(4px) scale(0.985);
+  opacity: 0;
+  animation: wc-pop-in 0.18s ease-out forwards;
+}
+
+@keyframes wc-pop-in {
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* 은은한 링 효과 */
+.work-dialog.v4::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  pointer-events: none;
+  background: radial-gradient(
+    1200px 180px at 8% -10%,
+    color-mix(in oklab, var(--accent, #6b7280) 18%, transparent),
+    transparent 60%
+  );
+  mask: linear-gradient(#000, rgba(0, 0, 0, 0.4));
+}
+
+/* ----- Header (V4) ----- */
+.work-dialog-head-v4 {
+  display: grid;
+  gap: 8px;
+}
+.work-dialog-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.title-v4 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--wc-text);
+  line-height: 1.25;
+}
+.sub-v4 {
+  margin: 0;
+  color: var(--wc-muted);
+  font-size: 0.9rem;
+}
+
+/* ----- Year + Impact (통합칩) ----- */
+.year-impact {
+  display: flex;
+  align-items: center;
+}
+
+.yi-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--wc-border);
+  /* 다크/라이트 모두 은은하게 보이는 배경 */
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--accent, #6b7280) 16%, transparent),
+    color-mix(in oklab, var(--accent, #6b7280) 8%, transparent) 60%
+  );
+  color: var(--wc-text);
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums; /* 숫자 정렬 */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 1px 0 rgba(0, 0, 0, 0.06);
+}
+
+.yi-year {
+  padding-right: 2px;
+}
+.yi-sep {
+  opacity: 0.7;
+}
+.yi-impact .num {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+.yi-impact .unit {
+  font-size: 0.82rem;
+  opacity: 0.9;
+}
+
+/* 접근성: 포커스 시 또렷하게 */
+.yi-chip:focus-visible {
+  outline: 2px solid
+    color-mix(in oklab, var(--accent, #5ca2ff) 80%, transparent);
+  outline-offset: 2px;
+}
+
+/* 모바일 살짝 줄임 */
+@media (max-width: 600px) {
+  .yi-chip {
+    height: 26px;
+    padding: 0 10px;
+    font-size: 0.86rem;
+  }
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 600px) {
+  .work-dialog.v4 {
+    padding: 16px;
+    border-radius: 12px;
+  }
+  .title-v4 {
+    font-size: 1.2rem;
+  }
+  .desc-lg {
+    font-size: 0.9rem;
+  }
+}

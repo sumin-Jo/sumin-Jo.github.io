@@ -1,5 +1,6 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import "../../css/components/pages/work_card.css";
 
 export default function WorkCard({ item = {} }) {
   const [open, setOpen] = useState(false);
@@ -15,7 +16,7 @@ export default function WorkCard({ item = {} }) {
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
-  // ===== Derived values: Year/Count =====
+  // ===== Derived values =====
   const year = (() => {
     const s = (item?.work_at ?? "").toString();
     if (s.length >= 4 && /^\d{4}/.test(s)) return s.slice(0, 4);
@@ -29,7 +30,10 @@ export default function WorkCard({ item = {} }) {
   })();
   const impactLabel = new Intl.NumberFormat("ko-KR").format(impactCount);
 
-  // ===== Accessibility/Focus Lock =====
+  const accent = accentColor(item?.category);
+  const badgeKey = colorKey(item?.category);
+
+  // ===== Accessibility / Focus lock =====
   useEffect(() => {
     if (!open) return;
     lastFocusedRef.current = document.activeElement;
@@ -58,9 +62,11 @@ export default function WorkCard({ item = {} }) {
         const first = focusables[0];
         const last = focusables[focusables.length - 1];
         if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault(); first.focus();
+          e.preventDefault();
+          first.focus();
         } else if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault(); last.focus();
+          e.preventDefault();
+          last.focus();
         }
       }
     };
@@ -72,107 +78,169 @@ export default function WorkCard({ item = {} }) {
     };
   }, [open]);
 
-  // ===== Accent color (category -> HEX) =====
-  const accent = accentColor(item?.category);
-
   return (
     <>
-      <article className="work-card" onClick={openModal}>
-        <div className="meta-line">
-          <span className={`badge ${colorKey(item.category)}`}>{item.category}</span>
-          <span className="sub">{item.stack}</span>
+      <article
+        className="work-card v2"
+        data-year={year}
+        style={{ "--accent": accent }}
+        onClick={openModal}
+        aria-labelledby={titleId}
+      >
+        {/* Year ribbon (always visible) */}
+        <div className="wc-year-ribbon" aria-hidden="true">
+          <span className="wc-year-text">{item.year}</span>
         </div>
 
-        <h3 className="ttl">{item.title}</h3>
-        <p className="desc">{item.description}</p>
+        {/* Category tag (top-left) */}
+        <div className="wc-topline">
+          <span className={`badge ${badgeKey}`}>{item.category}</span>
+        </div>
 
-        {/* ===== Metric Blocks (Card) ===== */}
-        <div className="meta-stats blocks">
-          <StatBlock value={year} label="YEAR" ariaLabel={`연도 ${year}`} accent={accent} />
-          <StatBlock value={impactLabel} label="건수" ariaLabel={`건수 ${impactLabel}건`} accent={accent} />
+        {/* Title & desc */}
+        <h3 id={titleId} className="wc-title">
+          {item.title}
+        </h3>
+        <p className="wc-desc">{item.description}</p>
+
+        {/* Footer summary row */}
+        <div className="wc-footer">
+          <div className="wc-metric">
+            <span className="wc-metric-label">건수</span>
+            <span
+              className="wc-metric-num"
+              aria-label={`건수 ${impactLabel}건`}
+            >
+              {impactLabel}
+            </span>
+          </div>
+          <div className="wc-stack" title={item.stack}>
+            {item.stack}
+          </div>
         </div>
       </article>
 
-      {open && createPortal(
-        <div className="work-modal" role="presentation"
-             onMouseDown={(e) => { if (e.target === e.currentTarget) closeModal(); }}>
+      {open &&
+        createPortal(
           <div
-            ref={dialogRef}
-            className="work-dialog"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={titleId}
-            aria-describedby={descId}
-            onMouseDown={(e) => e.stopPropagation()}
+            className="work-modal"
+            role="presentation"
+            onMouseDown={(e) => {
+              if (e.target === e.currentTarget) closeModal();
+            }}
           >
-            <header className="work-dialog-head">
-              <div className="work-dialog-left">
-                <span className={`badge ${colorKey(item.category)}`}>{item.category}</span>
-                <h3 id={titleId}>{item.title}</h3>
-                <p className="sub">{item.stack}</p>
-              </div>
-            </header>
+            <div
+              ref={dialogRef}
+              className="work-dialog v4"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={titleId}
+              aria-describedby={`${descId}-v4`}
+              onMouseDown={(e) => e.stopPropagation()}
+              style={{ "--accent": accent }}
+            >
+              <header className="work-dialog-head-v4">
+                <div className="work-dialog-meta">
+                  <span className={`badge ${badgeKey}`}>{item.category}</span>
 
-            <section>
-              <p id={descId} className="desc-lg">{item.description}</p>
-            </section>
+                  {/* 기존 year-impact-combined 대신 */}
+                  <div
+                    className="year-impact"
+                    aria-label={`연도 ${year}, 총 ${impactLabel}건`}
+                  >
+                    <span className="yi-chip">
+                      <span className="yi-year">{year}</span>
+                      <span className="yi-sep" aria-hidden="true">
+                        ·
+                      </span>
+                      <span className="yi-impact">
+                        <strong className="num">{impactLabel}</strong>
+                        <span className="unit">건</span>
+                      </span>
+                    </span>
+                  </div>
 
-            <footer>
-              {/* ===== Metric Blocks (Modal - bigger) ===== */}
-              <div className="meta-stats blocks lg">
-                <StatBlock value={year} label="YEAR" ariaLabel={`연도 ${year}`} accent={accent} />
-                <StatBlock value={impactLabel} label="건수" ariaLabel={`건수 ${impactLabel}건`} accent={accent} />
-              </div>
+                  {(item?.work_company || item?.work_period) && (
+                    <div className="meta-chips-v4" aria-hidden="true">
+                      {item?.work_company && (
+                        <span className="meta-chip-v4">
+                          {item.work_company}
+                        </span>
+                      )}
+                      {item?.work_period && (
+                        <span className="meta-chip-v4">{item.work_period}</span>
+                      )}
+                    </div>
+                  )}
+                </div>
 
-              <button type="button" ref={closeBtnRef} onClick={closeModal} className="close-btn">
-                닫기
-              </button>
-            </footer>
-          </div>
-        </div>,
-        document.body
-      )}
+                <h3 id={titleId} className="title-v4">
+                  {item.title}
+                </h3>
+                {item?.stack && <p className="sub-v4">{item.stack}</p>}
+              </header>
+
+              <section className="work-dialog-body-v4">
+                <p id={`${descId}-v4`} className="desc-lg">
+                  {item.description}
+                </p>
+              </section>
+
+              <footer className="work-dialog-footer-v4">
+                <button
+                  type="button"
+                  ref={closeBtnRef}
+                  onClick={closeModal}
+                  className="close-btn-v4"
+                  aria-label="모달 닫기"
+                  title="닫기"
+                >
+                  닫기
+                </button>
+              </footer>
+            </div>
+          </div>,
+          document.body
+        )}
     </>
   );
 }
 
-/* ===== New Mini Component: Metric Block ===== */
-function StatBlock({ value, label, ariaLabel, accent }) {
-  return (
-    <div
-      className="stat-block"
-      role="group"
-      aria-label={ariaLabel}
-      style={{ '--accent': accent }}
-    >
-      <div className="stat-block-num" aria-hidden="true">{value}</div>
-      <div className="stat-block-label">{label}</div>
-    </div>
-  );
-}
-
-/* 카테고리 -> 배지 클래스 */
-function colorKey(c){
-  switch(c){
-    case "bugfix": return "k-red";
-    case "datafix": return "k-amber";
-    case "feature": return "k-cyan";
-    case "ops": return "k-violet";
-    case "policy": return "k-emerald";
-    case "maintenance": return "k-blue";
-    default: return "k-gray";
+/* ===== Utils (keep same as before) ===== */
+function colorKey(c) {
+  switch (c) {
+    case "bugfix":
+      return "k-red";
+    case "datafix":
+      return "k-amber";
+    case "feature":
+      return "k-cyan";
+    case "ops":
+      return "k-violet";
+    case "policy":
+      return "k-emerald";
+    case "maintenance":
+      return "k-blue";
+    default:
+      return "k-gray";
   }
 }
 
-/* 카테고리 -> 포인트 색(배지와 동일 팔레트) */
-function accentColor(c){
-  switch(c){
-    case "bugfix": return "#ef4444";
-    case "datafix": return "#f59e0b";
-    case "feature": return "#06b6d4";
-    case "ops": return "#8b5cf6";
-    case "policy": return "#10b981";
-    case "maintenance": return "#3b82f6";
-    default: return "#6b7280";
+function accentColor(c) {
+  switch (c) {
+    case "bugfix":
+      return "#ef4444";
+    case "datafix":
+      return "#f59e0b";
+    case "feature":
+      return "#06b6d4";
+    case "ops":
+      return "#8b5cf6";
+    case "policy":
+      return "#10b981";
+    case "maintenance":
+      return "#3b82f6";
+    default:
+      return "#6b7280";
   }
 }
