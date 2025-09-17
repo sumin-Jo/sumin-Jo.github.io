@@ -1,5 +1,4 @@
-// src/components/pages/WorkHistory.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import "../../css/components/pages/work_history.css";
 import { supabase } from "../../lib/supabaseClient";
 
@@ -14,7 +13,7 @@ function resolveYear(item) {
   return cd.getFullYear();
 }
 
-/** 팔레트 키 매핑 (CSS .k-* 와 1:1 대응) */
+/** 팔레트 키 매핑 */
 function colorKey(c) {
   switch ((c || "").toLowerCase()) {
     case "bugfix":      return "k-red";
@@ -27,19 +26,39 @@ function colorKey(c) {
   }
 }
 
-/** 안전 스크롤 (고정 헤더/필터 높이 보정) */
+/** 미디어 조건 */
+const isReduced = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/** 반응형 오프셋(고정 헤더 등 보정) */
+function getScrollOffset() {
+  if (typeof window === "undefined") return 100;
+  const w = window.innerWidth || 1024;
+  if (w <= 480) return 68;        // iPhone 14 Pro Max/세로 기준
+  if (w <= 640) return 80;
+  if (w <= 768) return 92;
+  return 100;
+}
+
+/** 안전 스크롤 */
 function smoothScrollTo(el, offset = 100) {
   if (!el) return;
   const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
-  window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
-  // 접근성: 시각 포커스 이동(필요 없으면 주석 처리)
+  window.scrollTo({
+    top: Math.max(0, y),
+    behavior: isReduced() ? "auto" : "smooth",
+  });
   if (typeof el.focus === "function") el.focus({ preventScroll: true });
 }
 
-export default function WorkHistory({ showMoreHref, all = false, limit = 9 }) {
+export default function WorkHistory({ showMoreHref, all = true, limit = 9 }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
+  const [scrollOffset, setScrollOffset] = useState(getScrollOffset());
+  const tickingRef = useRef(false);
 
   // 데이터 로드
   useEffect(() => {
@@ -64,11 +83,9 @@ export default function WorkHistory({ showMoreHref, all = false, limit = 9 }) {
       if (!mounted) return;
 
       if (error) {
-        console.log("[WorkHistory] fetch error:", error);
         setErr(error.message || "fetch error");
         setItems([]);
       } else {
-        console.log("[WorkHistory] rows:", data?.length ?? 0, "sample:", data?.[0]);
         setItems(data || []);
       }
       setLoading(false);
@@ -92,33 +109,46 @@ export default function WorkHistory({ showMoreHref, all = false, limit = 9 }) {
     return { years: ys, grouped: g };
   }, [items]);
 
-  // 스크롤 스파이
+  // 스크롤 스파이 (모바일에서 부하 낮춤)
   useEffect(() => {
     const onScroll = () => {
-      const sections = document.querySelectorAll('[id^="year-"]');
-      const links = document.querySelectorAll(".wh-nav a");
-      let current = "";
-      sections.forEach((sec) => {
-        const top = sec.getBoundingClientRect().top + window.scrollY;
-        if (window.scrollY >= top - 100) current = sec.id;
-      });
-      links.forEach((a) => {
-        a.classList.remove("is-active");
-        if (current && a.getAttribute("data-target") === current) {
-          a.classList.add("is-active");
-        }
+      if (tickingRef.current) return;
+      tickingRef.current = true;
+      requestAnimationFrame(() => {
+        const sections = document.querySelectorAll('[id^="year-"]');
+        const links = document.querySelectorAll(".wh-nav a");
+        let current = "";
+        const offset = getScrollOffset();
+        sections.forEach((sec) => {
+          const top = sec.getBoundingClientRect().top + window.scrollY;
+          if (window.scrollY >= top - offset - 8) current = sec.id;
+        });
+        links.forEach((a) => {
+          a.classList.remove("is-active");
+          if (current && a.getAttribute("data-target") === current) {
+            a.classList.add("is-active");
+          }
+        });
+        tickingRef.current = false;
       });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [years]);
 
-  // 왼쪽 메뉴 클릭 → 부드러운 스크롤 (해시 라우터 충돌 방지)
+  // 리사이즈 시 오프셋 갱신
+  useEffect(() => {
+    const onResize = () => setScrollOffset(getScrollOffset());
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // 왼쪽 메뉴 클릭 → 부드러운 스크롤
   const onNavClick = (y, e) => {
     if (e) e.preventDefault();
     const id = `year-${y}`;
     const el = document.getElementById(id);
-    if (el) smoothScrollTo(el, 100);
+    if (el) smoothScrollTo(el, scrollOffset);
     if (history && history.replaceState) {
       history.replaceState(null, "", `#${id}`);
     }
@@ -130,24 +160,20 @@ export default function WorkHistory({ showMoreHref, all = false, limit = 9 }) {
       const h = (window.location.hash || "").replace(/^#/, "");
       if (!h) return;
       const el = document.getElementById(h);
-      if (el) {
-        // 목록/섹션 렌더 완료 보장 후 스크롤
-        requestAnimationFrame(() => smoothScrollTo(el, 100));
-      }
+      if (el) requestAnimationFrame(() => smoothScrollTo(el, scrollOffset));
     };
-    // 데이터 그룹 렌더링이 끝난 뒤에 처리
     if (!loading) handleHash();
     window.addEventListener("hashchange", handleHash);
     return () => window.removeEventListener("hashchange", handleHash);
-  }, [loading, years]);
+  }, [loading, years, scrollOffset]);
 
   return (
     <div className="wh-root">
       <div className="wh-container">
         {/* 사이드바 */}
-        <aside className="wh-sidebar">
+        <aside className="wh-sidebar" aria-label="연도별 보기 사이드바">
           <div className="wh-side-title">연도별 보기</div>
-          <ul className="wh-nav" id="year-nav-menu">
+          <ul className="wh-nav" id="year-nav-menu" role="tablist">
             {years.map((y) => (
               <li key={y}>
                 <a
@@ -190,12 +216,15 @@ export default function WorkHistory({ showMoreHref, all = false, limit = 9 }) {
             {!loading &&
               years.map((y) => (
                 <section key={y}>
-                  {/* 포커스 가능 + 스크롤 고정 헤더 피하도록 JS에서 오프셋 처리 */}
                   <h3 id={`year-${y}`} className="wh-year" tabIndex="-1">
                     {y}
                   </h3>
                   {(grouped[y] || []).map((item) => {
                     const palette = colorKey(item.category);
+                    const stacks = String(item.stack || "")
+                      .split("/")
+                      .map((s) => s.trim())
+                      .filter(Boolean);
                     return (
                       <article key={item.id} className={`wh-card ${palette}`}>
                         <div className="wh-dot" />
@@ -210,15 +239,15 @@ export default function WorkHistory({ showMoreHref, all = false, limit = 9 }) {
                           <h4 className="wh-card-title">{item.title}</h4>
                           <p className="wh-desc">{item.description}</p>
 
-                          <div className="wh-tags">
-                            {String(item.stack || "")
-                              .split("/")
-                              .map((s, i) => (
-                                <span key={i} className="wh-tag">
-                                  {s.trim()}
+                          {!!stacks.length && (
+                            <div className="wh-tags" aria-label="기술 스택 태그">
+                              {stacks.map((s, i) => (
+                                <span key={`${item.id}-tag-${i}`} className="wh-tag">
+                                  {s}
                                 </span>
                               ))}
-                          </div>
+                            </div>
+                          )}
 
                           <div className="wh-impact">실행 건수: {item.impact ?? "—"}</div>
                         </div>
